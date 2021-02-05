@@ -13,6 +13,16 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/../../../../../../../:\Users\tt91\Documents\GitHub\MovieCollection2021\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+
+
 # Generated files
 .idea/**/contentModel.xml
 .idea/**/contentModel.xml
