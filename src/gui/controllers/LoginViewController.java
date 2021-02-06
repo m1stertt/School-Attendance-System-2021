@@ -2,7 +2,7 @@ package gui.controllers;
 
 import com.sun.tools.javac.Main;
 
-public class LoginView {
+public class LoginViewController {
 
     private Main main;
 
