@@ -1,0 +1,35 @@
+#background {
+    -fx-background-image: url(../images/background.png);
+    -fx-background-size: cover;
+}
+
+#SchoolA {
+    -fx-text-fill: white;
+    -fx-font-family: "Agency FB";
+}
+
+#PasswordID {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+#StudentID {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+.button {
+    -fx-background-color:
+            #141312,
+            linear-gradient(#7ebcea, #2f4b8f),
+            linear-gradient(#009fe3, #263e75),
+            linear-gradient(#009fe3, #223768);
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-family: "Arial Black";
+}
