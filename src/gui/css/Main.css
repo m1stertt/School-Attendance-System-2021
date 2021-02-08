@@ -1,6 +1,18 @@
 #background {
+    -fx-background-color: #141312;
+    -fx-border-color: #fbbb2c;
+    -fx-border-width: 8;
+
+
+
+    /*
     -fx-background-image: url(../images/background.png);
     -fx-background-size: cover;
+
+    fbbb2c : orange
+       009fe3 : blue
+     */
+
 }
 
 #SchoolA {
@@ -15,6 +27,11 @@
 #StudentID {
     -fx-text-fill: white;
     -fx-font-family: "Arial Rounded MT Bold";
+}
+.background{
+    -fx-background-color: #141312;
+    -fx-border-color: #fbbb2c;
+    -fx-border-width: 8;
 }
 
 .label {
@@ -42,4 +59,20 @@
 .text-field:focused {
     -fx-background-color: #a9a9a9 , white , white;
     -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+}
+.menu-bar .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-opacity: 0.5;
+}
+.menu .left-container {
+    -fx-background-color: #141312;
+}
+.menu-bar {
+    -fx-background-color: derive(#141312,20%);
+}
+
+.context-menu {
+    -fx-background-color: derive(#141312,50%);
 }

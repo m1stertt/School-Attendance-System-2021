@@ -40,7 +40,7 @@ public class LoginViewController implements Initializable {
     }
 
     public void addImage(){
-        Image image =  new Image("gui/images/EASV_v2.png");
-        EASV.setImage(image);
+        Image logo =  new Image("gui/images/EASV_v2.png");
+        EASV.setImage(logo);
     }
 }
