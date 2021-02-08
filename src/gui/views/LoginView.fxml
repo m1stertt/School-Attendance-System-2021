@@ -5,13 +5,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="350.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginViewController">
+<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="350.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginViewController">
     <children>
         <Label id="SchoolA" alignment="TOP_CENTER" layoutX="99.0" layoutY="94.0" stylesheets="@../css/Main.css" text="School Attendance" AnchorPane.topAnchor="94.0">
             <font>
@@ -51,10 +50,6 @@
                 <PasswordField />
             </children>
         </VBox>
-      <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0">
-         <image>
-            <Image url="@../images/EASV_v2.png" />
-         </image>
-      </ImageView>
+      <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" />
     </children>
 </AnchorPane>
