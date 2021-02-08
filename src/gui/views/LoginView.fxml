@@ -35,7 +35,7 @@
                         <Font size="13.0" />
                     </font>
                 </Label>
-                <TextField>
+                <TextField id="textField" stylesheets="@../css/Main.css">
                     <VBox.margin>
                         <Insets bottom="20.0" />
                     </VBox.margin>
