@@ -7,6 +7,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -47,9 +50,26 @@
                         <Font size="13.0" />
                     </font>
                 </Label>
-                <PasswordField />
+            <VBox maxHeight="25.0" prefHeight="25.0" prefWidth="100.0">
+               <children>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                            <PasswordField fx:id="passwordField" />
+                        <TextField fx:id="passwordTextField" visible="false" />
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
             </children>
         </VBox>
       <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" />
+      <Button fx:id="showPassword" layoutX="284.0" layoutY="310.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onShowPassword" prefHeight="10.0" prefWidth="25.0" styleClass="visiblePassWord" AnchorPane.topAnchor="304.0" />
+      <Button fx:id="hidePassword" layoutX="284.0" layoutY="310.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onHidePassword" prefHeight="10.0" prefWidth="25.0" styleClass="nonVisiblePassword" visible="false" AnchorPane.topAnchor="302.0" />
     </children>
 </AnchorPane>
