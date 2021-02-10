@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="350.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginViewController">
+<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="350.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginViewController">
     <children>
         <Label id="SchoolA" alignment="TOP_CENTER" layoutX="99.0" layoutY="94.0" stylesheets="@../css/Main.css" text="School Attendance" AnchorPane.topAnchor="94.0">
             <font>
@@ -25,11 +25,10 @@
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-        <Button layoutX="203.0" layoutY="349.0" mnemonicParsing="false" onAction="#loginTeacher" text="Login as Teacher" AnchorPane.rightAnchor="40.0" />
-        <Button layoutX="43.0" layoutY="349.0" mnemonicParsing="false" onAction="#loginStudent" text="Login as Student" AnchorPane.leftAnchor="40.0" />
+        <Button layoutX="125.0" layoutY="349.0" mnemonicParsing="false" onAction="#attendanceLogin" prefHeight="25.0" prefWidth="101.0" text="Login" AnchorPane.leftAnchor="125.0" />
         <VBox layoutX="85.0" layoutY="182.0" prefHeight="150.0" prefWidth="180.0" AnchorPane.leftAnchor="85.0" AnchorPane.topAnchor="182.0">
             <children>
-                <Label id="StudentID" stylesheets="@../css/Main.css" text="Studen name:">
+                <Label id="StudentID" stylesheets="@../css/Main.css" text="Username:">
                     <VBox.margin>
                         <Insets bottom="20.0" />
                     </VBox.margin>
@@ -37,7 +36,7 @@
                         <Font size="13.0" />
                     </font>
                 </Label>
-                <TextField id="textField" stylesheets="@../css/Main.css">
+                <TextField id="textField" fx:id="usernameField" stylesheets="@../css/Main.css">
                     <VBox.margin>
                         <Insets bottom="20.0" />
                     </VBox.margin>

@@ -1,7 +1,6 @@
 package gui.controllers;
 
 import com.sun.tools.javac.Main;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,6 +16,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 
@@ -27,6 +27,8 @@ public class LoginViewController implements Initializable {
     @FXML
     TextField passwordTextField;
     @FXML
+    TextField usernameField;
+    @FXML
     Button showPassword;
     @FXML
     Button hidePassword;
@@ -36,29 +38,31 @@ public class LoginViewController implements Initializable {
 
     private Main main;
 
-    @FXML
-    void loginStudent()
-    {
-        try {
-            FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/StudentView.fxml")));
-            Parent root = loader.load();
-            handleStageGeneral(root, "Student Attendance Page");
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
 
-    }
+
 
     @FXML
-    void loginTeacher() {
-        try {
-            FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/TeacherView.fxml")));
-            Parent root = loader.load();
-            handleStageGeneral(root, "Teacher Attendance Page");
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
+    void attendanceLogin() {
+        String username = usernameField.getText().toLowerCase();
 
+        if (username.equals("teacher")) {
+            try {
+                FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/TeacherView.fxml")));
+                Parent root = loader.load();
+                handleStageGeneral(root, "Teacher Attendance Page");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/StudentView.fxml")));
+                Parent root = loader.load();
+                handleStageGeneral(root, "Student Attendance Page");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     @FXML
@@ -107,4 +111,31 @@ public class LoginViewController implements Initializable {
         stage.showAndWait();
 
     }
+
 }
+
+/*
+    @FXML
+    void loginStudent()
+    {
+        try {
+            FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/StudentView.fxml")));
+            Parent root = loader.load();
+            handleStageGeneral(root, "Student Attendance Page");
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    void loginTeacher() {
+        try {
+            FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/TeacherView.fxml")));
+            Parent root = loader.load();
+            handleStageGeneral(root, "Teacher Attendance Page");
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
+
+    }*/
