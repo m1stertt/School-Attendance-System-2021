@@ -12,25 +12,24 @@ import java.util.ResourceBundle;
 
 public class StudentViewController implements Initializable {
 
+    private ScreenController screenController;
+
     @FXML
     private ImageView EASV;
-    @FXML
-    private Button closeStudent;
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addImage();
+        screenController = ScreenController.getInstance();
     }
 
-    public void addImage(){
-        Image logo =  new Image("gui/images/EASV_v2.png");
+    public void addImage() {
+        Image logo = new Image("gui/images/EASV_v2.png");
         EASV.setImage(logo);
     }
 
     @FXML
     void closesStudent() {
-        Stage window = (Stage) closeStudent.getScene().getWindow();
-        window.close();
+        screenController.loginInPage();
     }
 }

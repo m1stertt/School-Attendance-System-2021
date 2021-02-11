@@ -1,22 +1,14 @@
 package gui.controllers;
 
-import com.sun.tools.javac.Main;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 
@@ -36,9 +28,7 @@ public class LoginViewController implements Initializable {
     @FXML
     private ImageView EASV;
 
-    private Main main;
-
-
+    private ScreenController screenController;
 
 
     @FXML
@@ -46,27 +36,15 @@ public class LoginViewController implements Initializable {
         String username = usernameField.getText().toLowerCase();
 
         if (username.equals("teacher")) {
-            try {
-                FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/TeacherView.fxml")));
-                Parent root = loader.load();
-                handleStageGeneral(root, "Teacher Attendance Page");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            screenController.teacherPage();
         } else {
-            try {
-                FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/StudentView.fxml")));
-                Parent root = loader.load();
-                handleStageGeneral(root, "Student Attendance Page");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            screenController.studentPage();
         }
     }
 
+
     @FXML
-    void onShowPassword(){
+    void onShowPassword() {
         passwordField.setVisible(false);
         passwordTextField.setVisible(true);
         showPassword.setVisible(false);
@@ -75,7 +53,7 @@ public class LoginViewController implements Initializable {
     }
 
     @FXML
-    void onHidePassword(){
+    void onHidePassword() {
         passwordTextField.setVisible(false);
         passwordField.setVisible(true);
         showPassword.setVisible(true);
@@ -83,34 +61,18 @@ public class LoginViewController implements Initializable {
         passwordField.setText(passwordTextField.getText());
     }
 
-
-    public void setMainApp(Main mainApp){
-        this.main = mainApp;
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addImage();
+        screenController = ScreenController.getInstance();
 
     }
 
-    public void addImage(){
-        Image logo =  new Image("gui/images/EASV_v2.png");
+    public void addImage() {
+        Image logo = new Image("gui/images/EASV_v2.png");
         EASV.setImage(logo);
     }
 
-    private void handleStageGeneral(Parent root, String title) {
-
-        Scene scene = new Scene(root);
-        scene.setFill(null);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.setTitle(title);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.showAndWait();
-
-    }
 
 }
 

@@ -14,24 +14,23 @@ public class TeacherViewController implements Initializable {
 
     @FXML
     private ImageView EASV;
-    @FXML
-    private Button closeTeacher;
 
-
+    private ScreenController screenController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addImage();
+        screenController = ScreenController.getInstance();
     }
 
-    public void addImage(){
-        Image logo =  new Image("gui/images/EASV_v2.png");
+    public void addImage() {
+        Image logo = new Image("gui/images/EASV_v2.png");
         EASV.setImage(logo);
     }
 
     @FXML
     void closesTeacher() {
-        Stage window = (Stage) closeTeacher.getScene().getWindow();
-        window.close();
+        screenController.loginInPage();
     }
+
 }
