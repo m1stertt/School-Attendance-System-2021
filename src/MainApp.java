@@ -16,7 +16,8 @@ public class MainApp extends Application {
         screenController.setPrimaryStage(primaryStage);
         screenController.getPrimaryStage().setTitle("School Attendance");
         screenController.initBackgroundLayout();
-        screenController.loginInPage();
+        screenController.setLoginInView();
+
 
     }
 

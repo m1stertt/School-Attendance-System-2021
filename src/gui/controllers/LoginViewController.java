@@ -15,33 +15,37 @@ import java.util.ResourceBundle;
 public class LoginViewController implements Initializable {
 
     @FXML
-    PasswordField passwordField;
+    private PasswordField passwordField;
     @FXML
-    TextField passwordTextField;
+    private TextField passwordTextField;
     @FXML
-    TextField usernameField;
+    private TextField usernameField;
     @FXML
-    Button showPassword;
+    private Button showPassword;
     @FXML
-    Button hidePassword;
+    private Button hidePassword;
 
     @FXML
     private ImageView EASV;
 
     private ScreenController screenController;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        addImage();
+        screenController = ScreenController.getInstance();
+    }
 
     @FXML
     void attendanceLogin() {
         String username = usernameField.getText().toLowerCase();
 
         if (username.equals("teacher")) {
-            screenController.teacherPage();
+            screenController.setTeacherView();
         } else {
-            screenController.studentPage();
+            screenController.setStudentView();
         }
     }
-
 
     @FXML
     void onShowPassword() {
@@ -61,43 +65,9 @@ public class LoginViewController implements Initializable {
         passwordField.setText(passwordTextField.getText());
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        addImage();
-        screenController = ScreenController.getInstance();
-
-    }
-
     public void addImage() {
         Image logo = new Image("gui/images/EASV_v2.png");
         EASV.setImage(logo);
     }
 
-
 }
-
-/*
-    @FXML
-    void loginStudent()
-    {
-        try {
-            FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/StudentView.fxml")));
-            Parent root = loader.load();
-            handleStageGeneral(root, "Student Attendance Page");
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @FXML
-    void loginTeacher() {
-        try {
-            FXMLLoader loader = new FXMLLoader((getClass().getResource("/gui/views/TeacherView.fxml")));
-            Parent root = loader.load();
-            handleStageGeneral(root, "Teacher Attendance Page");
-        }catch(IOException e) {
-            e.printStackTrace();
-        }
-
-    }*/

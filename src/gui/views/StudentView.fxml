@@ -5,7 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="background" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.StudentViewController">
+<AnchorPane id="background" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.StudentViewController">
    <children>
       <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="20.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0" />
       <Button fx:id="closeStudent" layoutX="524.0" layoutY="21.0" mnemonicParsing="false" onAction="#closesStudent" text="Log Out" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />

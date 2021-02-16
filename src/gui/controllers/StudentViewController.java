@@ -30,6 +30,6 @@ public class StudentViewController implements Initializable {
 
     @FXML
     void closesStudent() {
-        screenController.loginInPage();
+        screenController.setLoginInView();
     }
 }

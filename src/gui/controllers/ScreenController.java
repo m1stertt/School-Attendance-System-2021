@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 
 /**
@@ -44,24 +45,26 @@ public class ScreenController {
             Scene scene = new Scene(backgroundLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
+            primaryStage.setResizable(false);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void loginInPage() {
+    public void setLoginInView() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ScreenController.class.getResource("/gui/views/LoginView.fxml"));
             AnchorPane userLogin = (AnchorPane) loader.load();
-            setStageOptions(370, 475, userLogin);
+            setStageOptions(366, 468, userLogin);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void teacherPage() {
+    public void setTeacherView() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ScreenController.class.getResource("/gui/views/TeacherView.fxml"));
@@ -73,7 +76,8 @@ public class ScreenController {
         }
     }
 
-    public void studentPage() {
+
+    public void setStudentView() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ScreenController.class.getResource("/gui/views/StudentView.fxml"));
