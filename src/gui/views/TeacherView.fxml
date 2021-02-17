@@ -15,11 +15,11 @@
 
 <AnchorPane id="background" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.TeacherViewController">
    <children>
-      <JFXComboBox fx:id="courseComboCheckBox" focusColor="#fbbb2c" layoutX="96.0" layoutY="114.0" minWidth="-Infinity" onAction="#onComboboxSelect" prefWidth="100.0" unFocusColor="#2f4b8f">
+      <JFXComboBox fx:id="courseComboCheckBox" focusColor="#fbbb2c" layoutX="96.0" layoutY="98.0" minWidth="-Infinity" onAction="#onComboboxSelect" prefWidth="100.0" unFocusColor="#2f4b8f">
          <effect>
             <BoxBlur iterations="0" />
          </effect></JFXComboBox>
-      <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0" />
+      <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="5.0" />
       <Button fx:id="closeTeacher" layoutX="534.0" layoutY="14.0" mnemonicParsing="false" onAction="#closesTeacher" text="Log Out" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
       <Label layoutX="453.0" layoutY="27.0" text="Teacher" />
       <PieChart fx:id="attendancePieChart" layoutX="33.0" layoutY="356.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="208.0" prefWidth="288.0" title="Overall Class Attendance:" />
@@ -42,5 +42,6 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </AreaChart>
+      <Label fx:id="currentTime" layoutX="533.0" layoutY="72.0" text="Label" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="55.0" />
    </children>
 </AnchorPane>

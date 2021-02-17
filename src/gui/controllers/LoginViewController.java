@@ -1,8 +1,10 @@
 package gui.controllers;
 
+import dal.StudRegDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -25,6 +27,7 @@ public class LoginViewController implements Initializable {
     @FXML
     private Button hidePassword;
 
+
     @FXML
     private ImageView EASV;
 
@@ -42,8 +45,10 @@ public class LoginViewController implements Initializable {
 
         if (username.equals("teacher")) {
             screenController.setTeacherView();
-        } else {
+        } else if(username.equals("student")){
             screenController.setStudentView();
+        } else {
+            return;
         }
     }
 

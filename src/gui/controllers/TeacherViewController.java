@@ -13,6 +13,7 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,6 +22,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class TeacherViewController implements Initializable {
@@ -40,6 +44,8 @@ public class TeacherViewController implements Initializable {
     @FXML
     private JFXComboBox<Course> courseComboCheckBox;
     @FXML
+    private Label currentTime;
+    @FXML
     private ImageView EASV;
 
     private ScreenController screenController;
@@ -55,6 +61,7 @@ public class TeacherViewController implements Initializable {
         courseComboCheckBox.getSelectionModel().selectFirst();
         drawPieChartData();
         drawAreaChartData();
+        timeDisplayed();
     }
 
     public void drawPieChartData() {
@@ -94,6 +101,12 @@ public class TeacherViewController implements Initializable {
         studentLastName.setMaxWidth(75);
         summarizedAttendance.setMaxWidth(115);
         initializeStudents();
+    }
+
+    public void timeDisplayed(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        currentTime.setText("Current Time: "+String.valueOf(dtf.format(now)));
     }
 
     public void addImage() {
