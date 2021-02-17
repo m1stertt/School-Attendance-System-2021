@@ -1,10 +1,8 @@
 package gui.controllers;
 
-import dal.StudRegDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -40,7 +38,7 @@ public class LoginViewController implements Initializable {
     }
 
     @FXML
-    void attendanceLogin() {
+    public void attendanceLogin() {
         String username = usernameField.getText().toLowerCase();
 
         if (username.equals("teacher")) {
@@ -53,7 +51,7 @@ public class LoginViewController implements Initializable {
     }
 
     @FXML
-    void onShowPassword() {
+    public void onShowPassword() {
         passwordField.setVisible(false);
         passwordTextField.setVisible(true);
         showPassword.setVisible(false);
@@ -62,7 +60,7 @@ public class LoginViewController implements Initializable {
     }
 
     @FXML
-    void onHidePassword() {
+    public void onHidePassword() {
         passwordTextField.setVisible(false);
         passwordField.setVisible(true);
         showPassword.setVisible(true);
