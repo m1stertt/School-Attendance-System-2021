@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,6 +19,8 @@ import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class TeacherViewController implements Initializable {
@@ -35,7 +38,8 @@ public class TeacherViewController implements Initializable {
     private TableColumn summarizedAttendanceWeekday;
     @FXML
     private JFXComboBox<Course> courseComboCheckBox;
-
+    @FXML
+    private Label currentTime;
     @FXML
     private ImageView EASV;
 
@@ -52,6 +56,7 @@ public class TeacherViewController implements Initializable {
         addClasses();
         courseComboCheckBox.getSelectionModel().selectFirst();
         drawData();
+        timeDisplayed();
     }
 
     public void drawData() {
@@ -84,6 +89,11 @@ public class TeacherViewController implements Initializable {
         summarizedAttendanceWeekday.setMaxWidth(170);
     }
 
+    public void timeDisplayed(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        currentTime.setText("Current Time: "+String.valueOf(dtf.format(now)));
+    }
 
     public void addImage() {
         Image logo = new Image("gui/images/EASV_v2.png");
