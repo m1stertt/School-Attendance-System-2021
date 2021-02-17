@@ -6,18 +6,7 @@ public class Student {
     private String lastName;
     private double absence;
 
-    public double getAbsence() {
-        return absence;
-    }
-
-    public void setAbsence(double absence) {
-        this.absence = absence;
-    }
-
-
-
-
-    public Student(String firstName, double absence) {
+    public Student(String firstName, String lastName, double absence) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.absence = absence;
@@ -39,8 +28,12 @@ public class Student {
         this.lastName = lastName;
     }
 
+    public double getAbsence() {
+        return absence;
+    }
 
-
-
+    public void setAbsence(double absence) {
+        this.absence = absence;
+    }
 
 }

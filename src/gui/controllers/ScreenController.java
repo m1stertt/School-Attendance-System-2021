@@ -69,7 +69,7 @@ public class ScreenController {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ScreenController.class.getResource("/gui/views/TeacherView.fxml"));
             AnchorPane teacherView = (AnchorPane) loader.load();
-            setStageOptions(650, 475, teacherView);
+            setStageOptions(875, 675, teacherView);
 
         } catch (IOException e) {
             e.printStackTrace();
