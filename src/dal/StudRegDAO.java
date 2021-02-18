@@ -4,6 +4,7 @@ import be.Course;
 import be.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
 
 import java.util.List;
 import java.util.Random;
@@ -20,18 +21,15 @@ public class StudRegDAO {
 
         ObservableList<Student> studentData = FXCollections.observableArrayList(
 
-
-                new Student("Peter", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Ole", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Allan", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Jesper", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Casper", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Nikolaj", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Clark", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Bent", (r.nextInt(100) / totalCourses) * 100)
-
+                new Student("Peter", "Hansen", (r.nextInt(100) / totalCourses) * 100),
+                new Student("Ole", "Petersen", (r.nextInt(100) / totalCourses) * 100),
+                new Student("Allan", "Olsen", (r.nextInt(100) / totalCourses) * 100),
+                new Student("Jesper", "Allansen", (r.nextInt(100) / totalCourses) * 100),
+                new Student("Casper", "Jespersen", (r.nextInt(100) / totalCourses) * 100),
+                new Student("Nikolaj", "Caspersen", (r.nextInt(100) / totalCourses) * 100),
+                new Student("Clark", "Nikolajsen", (r.nextInt(100) / totalCourses) * 100),
+                new Student("Bent", "Clarksen", (r.nextInt(100) / totalCourses) * 100)
         );
-        System.out.println(r.nextInt(100));
         return studentData;
     }
 
@@ -41,5 +39,18 @@ public class StudRegDAO {
                 new Course("SDE2.B.21", 85, 15)
         );
         return classData;
+    }
+
+    public XYChart.Series getSummarizedStudentWeekDayData(){
+    XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Student Attendance");
+        Random r = new Random();
+        double totalCourses = 100;
+        series.getData().add(new XYChart.Data<>("Monday", (r.nextInt(10) / totalCourses) * 100));
+        series.getData().add(new XYChart.Data<>("Tuesday", (r.nextInt(10) / totalCourses) * 100));
+        series.getData().add(new XYChart.Data<>("Wednesday", (r.nextInt(10) / totalCourses) * 100));
+        series.getData().add(new XYChart.Data<>("Thursday", (r.nextInt(10) / totalCourses) * 100));
+        series.getData().add(new XYChart.Data<>("Friday", (r.nextInt(10) / totalCourses) * 100));
+        return series;
     }
 }

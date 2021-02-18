@@ -189,6 +189,37 @@
     -fx-background-color: #141312;
 }
 
+.chart {
+    -fx-font-family: Agency FB;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.axis {
+    -fx-tick-label-font-size: 1.5em;
+    -fx-font-size: 1.4em;
+    -fx-tick-label-fill: #ffffff;
+    -fx-font-family: Agency FB;
+    -fx-tick-length: 10;
+    -fx-minor-tick-length: 5;
+}
+
+.axis-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14;
+    -fx-font-family: Agency FB;
+}
+
+.axis-tick-mark {
+    -fx-stroke: #637040;
+    -fx-stroke-width: 3;
+}
+.axis-minor-tick-mark {
+    -fx-stroke: #859656;
+}
+
 .jfx-combo-box .cell {
     -fx-text-fill: white;
 }

@@ -9,6 +9,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -16,9 +18,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -27,15 +29,16 @@ public class TeacherViewController implements Initializable {
 
     @FXML
     private PieChart attendancePieChart;
-
+    @FXML
+    private AreaChart studentAttendanceChart;
     @FXML
     private TableView<Student> studentsTableView;
     @FXML
-    private TableColumn studentName;
+    private TableColumn studentFirstName;
+    @FXML
+    private TableColumn studentLastName;
     @FXML
     private TableColumn summarizedAttendance;
-    @FXML
-    private TableColumn summarizedAttendanceWeekday;
     @FXML
     private JFXComboBox<Course> courseComboCheckBox;
     @FXML
@@ -52,41 +55,50 @@ public class TeacherViewController implements Initializable {
         screenController = ScreenController.getInstance();
         studRegManager = new StudRegManager();
         initializeStudentViewDisplay();
-        addStudents();
-        addClasses();
+        initializeCourses();
         courseComboCheckBox.getSelectionModel().selectFirst();
-        drawData();
+        drawPieChartData();
+        drawAreaChartData();
         timeDisplayed();
     }
 
-    public void drawData() {
+    public void drawPieChartData() {
         ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("Present", courseComboCheckBox.getSelectionModel().getSelectedItem().getPresence()),
                 new PieChart.Data("Absent", courseComboCheckBox.getSelectionModel().getSelectedItem().getAbsence())
-            );
+        );
         attendancePieChart.setData(attendancePieChartData);
     }
 
-    public void addStudents() {
-        studentsTableView.setItems(studRegManager.getAllStudents());
+    public void drawAreaChartData() {
+        Axis<String> xAxis = studentAttendanceChart.getXAxis();
+        xAxis.setTickLabelRotation(10);
+        Axis<String> yAxis = studentAttendanceChart.getYAxis();
+        yAxis.setLabel("Absence shown as lessons");
+
+        studentAttendanceChart.getData().add(studRegManager.getSummarizedStudentWeekDayData());
     }
 
-    public void addClasses() {
+    public void initializeStudents() {
+        studentsTableView.setItems(studRegManager.getAllStudents());
+        summarizedAttendance.setSortType(TableColumn.SortType.DESCENDING);
+        studentsTableView.getSortOrder().setAll(summarizedAttendance);
+    }
+
+    public void initializeCourses() {
         courseComboCheckBox.getItems().addAll(studRegManager.getAllCourses());
+
     }
 
     public void initializeStudentViewDisplay() {
         //Set student columns.
-
-        studentName.setCellValueFactory(new PropertyValueFactory<Student, String>("firstName"));
+        studentFirstName.setCellValueFactory(new PropertyValueFactory<Student, String>("firstName"));
+        studentLastName.setCellValueFactory(new PropertyValueFactory<Student, String>("lastName"));
         summarizedAttendance.setCellValueFactory(new PropertyValueFactory<Student, Double>("absence"));
-        //  summarizedAttendanceWeekday.setCellValueFactory(new PropertyValueFactory<>(""));
-        studentName.setMaxWidth(75);
-        studentName.setMaxWidth(75);
-        summarizedAttendance.setMaxWidth(75);
-        summarizedAttendance.setMaxWidth(75);
-        summarizedAttendanceWeekday.setMaxWidth(155);
-        summarizedAttendanceWeekday.setMaxWidth(170);
+        studentFirstName.setMaxWidth(75);
+        studentLastName.setMaxWidth(75);
+        summarizedAttendance.setMaxWidth(115);
+        initializeStudents();
     }
 
     public void timeDisplayed(){
@@ -106,6 +118,11 @@ public class TeacherViewController implements Initializable {
     }
 
     public void onComboboxSelect(ActionEvent actionEvent) {
-        drawData();
+        drawPieChartData();
+    }
+
+    public void onStudentSelected(MouseEvent mouseEvent) {
+        studentAttendanceChart.getData().clear();
+        studentAttendanceChart.getData().add(studRegManager.getSummarizedStudentWeekDayData());
     }
 }
