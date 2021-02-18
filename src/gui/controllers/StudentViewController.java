@@ -1,17 +1,25 @@
 package gui.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Calendar;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class StudentViewController implements Initializable {
@@ -20,8 +28,13 @@ public class StudentViewController implements Initializable {
     private Label currentTime;
     @FXML
     private ImageView EASV;
+    @FXML
+    private PieChart attendancePieChart;
+    @FXML
+    private DatePicker datePicker;
 
     private ScreenController screenController;
+    //private List<String> CoursesPerDay; //@todo figure out, need dal stuff.
 
 
     @Override
@@ -29,6 +42,12 @@ public class StudentViewController implements Initializable {
         addImage();
         screenController = ScreenController.getInstance();
         timeDisplayed();
+        ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Present", 75), // @todo actually calculate
+                new PieChart.Data("Absent", 25) // same as above. Needs to be calcualted
+        );
+        attendancePieChart.setData(attendancePieChartData);
+        datePicker.setValue(LocalDate.now());
     }
 
     public void timeDisplayed(){
