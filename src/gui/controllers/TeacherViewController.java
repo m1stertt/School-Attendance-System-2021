@@ -4,6 +4,7 @@ import be.Course;
 import be.Student;
 import bll.StudRegManager;
 import com.jfoenix.controls.JFXComboBox;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -34,11 +36,11 @@ public class TeacherViewController implements Initializable {
     @FXML
     private TableView<Student> studentsTableView;
     @FXML
-    private TableColumn studentFirstName;
+    private TableColumn<Student, String> studentFirstName;
     @FXML
-    private TableColumn studentLastName;
+    private TableColumn<Student, String> studentLastName;
     @FXML
-    private TableColumn summarizedAttendance;
+    public TableColumn<Student, String> summarizedAttendance;
     @FXML
     private JFXComboBox<Course> courseComboCheckBox;
     @FXML
@@ -92,14 +94,21 @@ public class TeacherViewController implements Initializable {
 
     public void initializeStudentViewDisplay() {
         //Set student columns.
+        DecimalFormat currency = new DecimalFormat(" 0.0%");
+
         studentFirstName.setCellValueFactory(new PropertyValueFactory<Student, String>("firstName"));
         studentLastName.setCellValueFactory(new PropertyValueFactory<Student, String>("lastName"));
-        summarizedAttendance.setCellValueFactory(new PropertyValueFactory<Student, Double>("absence"));
-        studentFirstName.setMaxWidth(75);
-        studentLastName.setMaxWidth(75);
-        summarizedAttendance.setMaxWidth(115);
+        summarizedAttendance.setCellValueFactory(cellData -> {
+            String formattedCost = currency.format(cellData.getValue().getAbsence());
+            return new SimpleStringProperty(formattedCost);
+        });
+        studentFirstName.setMaxWidth(90);
+        studentLastName.setMaxWidth(90);
+        summarizedAttendance.setMaxWidth(85);
         initializeStudents();
     }
+
+
 
     public void timeDisplayed(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");

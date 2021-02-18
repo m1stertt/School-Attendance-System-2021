@@ -28,7 +28,7 @@
         <columns>
           <TableColumn fx:id="studentFirstName" prefWidth="98.0" text="Firstname" />
             <TableColumn fx:id="studentLastName" prefWidth="78.0" text="Lastname" />
-          <TableColumn fx:id="summarizedAttendance" prefWidth="78.0" text="Summarized Att." />
+          <TableColumn fx:id="summarizedAttendance" prefWidth="78.0" text="Summ Att." />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

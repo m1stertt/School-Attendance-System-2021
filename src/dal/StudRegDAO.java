@@ -21,14 +21,13 @@ public class StudRegDAO {
 
         ObservableList<Student> studentData = FXCollections.observableArrayList(
 
-                new Student("Peter", "Hansen", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Ole", "Petersen", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Allan", "Olsen", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Jesper", "Allansen", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Casper", "Jespersen", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Nikolaj", "Caspersen", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Clark", "Nikolajsen", (r.nextInt(100) / totalCourses) * 100),
-                new Student("Bent", "Clarksen", (r.nextInt(100) / totalCourses) * 100)
+                new Student("Peter", "Hansen", r.nextInt(10) / totalCourses),
+                new Student("Ole", "Petersen", r.nextInt(10) / totalCourses),
+                new Student("Allan", "Olsen", r.nextInt(10) / totalCourses),
+                new Student("Jesper", "Allansen", r.nextInt(10) / totalCourses),
+                new Student("Casper", "Jespersen", r.nextInt(10) / totalCourses),
+                new Student("Nikolaj", "Caspersen", r.nextInt(10) / totalCourses),
+                new Student("Clark", "Nikolajsen", r.nextInt(10) / totalCourses)
         );
         return studentData;
     }
