@@ -49,7 +49,10 @@ public class StudentViewController implements Initializable {
     }
 
     public void createCoursesView(){
-        Integer classesCount=3; //Just static like this for now but I will make a course/classes DAL before friday delivery, so we use some static proper data.
+        Integer classesCount=3;
+        //Just static like this for now but I will make a course/classes DAL with static data
+        //inside before end of wednesday using our school schedule I figure
+        //so changing the dates will effect it and so on.
         //But it works and has scroll, try and change classesCount to 10 to see the scroll.
         for(int i=0;i<classesCount;i++){
             //Create buttons
