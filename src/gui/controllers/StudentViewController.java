@@ -4,11 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Line;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -26,6 +31,7 @@ public class StudentViewController implements Initializable {
     private ImageView EASV;
     @FXML
     private DatePicker datePicker;
+    @FXML private AnchorPane anchorPane;
 
     private ScreenController screenController;
 
@@ -37,6 +43,40 @@ public class StudentViewController implements Initializable {
         timeDisplayed();
         drawPieChartData();
         datePicker.setValue(LocalDate.now());
+
+
+        createCoursesView();
+    }
+
+    public void createCoursesView(){
+        Integer classesCount=3; //Just static like this for now but I will make a course/classes DAL before friday delivery, so we use some static proper data.
+        //But it works and has scroll, try and change classesCount to 10 to see the scroll.
+        for(int i=0;i<classesCount;i++){
+            //Create buttons
+            Group group=new Group();
+            group.relocate(108,-1+40*i);
+
+            Button button1=new Button("ABSENT");
+            button1.relocate(31,7);
+            button1.setStyle("-fx-background-color:#ff0000");
+            group.getChildren().add(button1);
+
+            Button button2=new Button("PRESENT");
+            button2.relocate(116,7);
+            button2.setStyle("-fx-background-color:green");
+            group.getChildren().add(button2);
+
+            Label label=new Label("SCO 8.45-11.30");
+            label.setStyle("-fx-text-fill:black;-fx-font-size:16px;");
+            label.relocate(-96,7);
+            group.getChildren().add(label);
+
+            Line line=new Line(-119,0,196,0); //@todo positioning needs to be better. off atm.
+            line.relocate(12,39);
+            group.getChildren().add(line);
+            anchorPane.getChildren().add(group);
+        }
+        anchorPane.setMinSize(320,40*classesCount); //This makes sure scroll appears, calculating the proper height for the pane, so the scrollpane will react.
     }
 
     public void drawPieChartData() {
