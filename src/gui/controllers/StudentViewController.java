@@ -53,7 +53,7 @@ public class StudentViewController implements Initializable {
 
     public void handleDatePicker(){
         datePicker.setValue(LocalDate.now()); //Set initial value
-        datePicker.valueProperty().addListener((ov, oldValue, newValue) -> { //Listen for changes in the date
+        datePicker.valueProperty().addListener((ov, oldValue, newValue) -> { //Listen for changes in the datePicker
             createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue())); //Update list of courses to reflect new date.
         });
     }
@@ -83,9 +83,18 @@ public class StudentViewController implements Initializable {
             Line line=new Line(-119,0,196,0); //@todo positioning needs to be better. off atm.
             line.relocate(12,39);
             group.getChildren().add(line);
+            setButtonEvents(button1,button2);
+            setButtonEvents(button2,button1);
             anchorPane.getChildren().add(group);
         }
         anchorPane.setMinSize(320,40*courses.size()); //This makes sure scroll appears, calculating the proper height for the pane, so the scrollpane will react.
+    }
+
+    public void setButtonEvents(Button button1,Button button2){
+        button1.setOnAction(e->{
+            button1.setDisable(true);
+            button2.setDisable(false);
+        });
     }
 
     public void drawPieChartData() {
@@ -99,7 +108,7 @@ public class StudentViewController implements Initializable {
     public void timeDisplayed(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         LocalDateTime now = LocalDateTime.now();
-        currentTime.setText("Current Time: "+String.valueOf(dtf.format(now)));
+        currentTime.setText("Current Time: "+dtf.format(now));
     }
 
     public void addImage() {
