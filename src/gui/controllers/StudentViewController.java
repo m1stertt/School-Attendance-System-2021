@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import bll.StudRegManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class StudentViewController implements Initializable {
@@ -34,6 +36,7 @@ public class StudentViewController implements Initializable {
     @FXML private AnchorPane anchorPane;
 
     private ScreenController screenController;
+    private StudRegManager studRegManager;
 
 
     @Override
@@ -42,19 +45,22 @@ public class StudentViewController implements Initializable {
         screenController = ScreenController.getInstance();
         timeDisplayed();
         drawPieChartData();
-        datePicker.setValue(LocalDate.now());
+        handleDatePicker();
 
-
-        createCoursesView();
+        studRegManager = new StudRegManager();
+        createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue()));
     }
 
-    public void createCoursesView(){
-        Integer classesCount=3;
-        //Just static like this for now but I will make a course/classes DAL with static data
-        //inside before end of wednesday using our school schedule I figure
-        //so changing the dates will effect it and so on.
-        //But it works and has scroll, try and change classesCount to 10 to see the scroll.
-        for(int i=0;i<classesCount;i++){
+    public void handleDatePicker(){
+        datePicker.setValue(LocalDate.now()); //Set initial value
+        datePicker.valueProperty().addListener((ov, oldValue, newValue) -> { //Listen for changes in the date
+            createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue())); //Update list of courses to reflect new date.
+        });
+    }
+
+    public void createCoursesView(List<String> courses){
+        anchorPane.getChildren().clear();
+        for(int i=0;i<courses.size();i++){
             //Create buttons
             Group group=new Group();
             group.relocate(108,-1+40*i);
@@ -69,7 +75,7 @@ public class StudentViewController implements Initializable {
             button2.setStyle("-fx-background-color:green");
             group.getChildren().add(button2);
 
-            Label label=new Label("SCO 8.45-11.30");
+            Label label=new Label(courses.get(i));
             label.setStyle("-fx-text-fill:black;-fx-font-size:16px;");
             label.relocate(-96,7);
             group.getChildren().add(label);
@@ -79,7 +85,7 @@ public class StudentViewController implements Initializable {
             group.getChildren().add(line);
             anchorPane.getChildren().add(group);
         }
-        anchorPane.setMinSize(320,40*classesCount); //This makes sure scroll appears, calculating the proper height for the pane, so the scrollpane will react.
+        anchorPane.setMinSize(320,40*courses.size()); //This makes sure scroll appears, calculating the proper height for the pane, so the scrollpane will react.
     }
 
     public void drawPieChartData() {
