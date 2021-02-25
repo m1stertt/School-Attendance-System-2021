@@ -64,6 +64,7 @@ public class StudentViewController implements Initializable {
             //Create buttons
             Group group=new Group();
             group.relocate(108,-1+40*i);
+            //The 40*i is the important part^ to make the list work, it defines how far down on the list this grouping will be and places it accordingly.
 
             Button button1=new Button("ABSENT");
             button1.relocate(31,7);
@@ -83,11 +84,12 @@ public class StudentViewController implements Initializable {
             Line line=new Line(-119,0,196,0); //@todo positioning needs to be better. off atm.
             line.relocate(12,39);
             group.getChildren().add(line);
-            setButtonEvents(button1,button2);
+
+            setButtonEvents(button1,button2); //Set events for "blurring" buttons on click and clearing the opposite button of any blur.
             setButtonEvents(button2,button1);
             anchorPane.getChildren().add(group);
         }
-        anchorPane.setMinSize(320,40*courses.size()); //This makes sure scroll appears, calculating the proper height for the pane, so the scrollpane will react.
+        anchorPane.setMinSize(320,40*courses.size()); //This makes sure scroll appears if necessary, calculating the proper height for the pane, so the scrollPane will react.
     }
 
     public void setButtonEvents(Button button1,Button button2){
@@ -99,8 +101,8 @@ public class StudentViewController implements Initializable {
 
     public void drawPieChartData() {
         ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Present", 85),
-                new PieChart.Data("Absent", 15)
+            new PieChart.Data("Present", 85),
+            new PieChart.Data("Absent", 15)
         );
         attendancePieChart.setData(attendancePieChartData);
     }
