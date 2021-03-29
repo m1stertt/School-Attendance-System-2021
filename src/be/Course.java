@@ -1,7 +1,12 @@
 package be;
 
+import java.util.Date;
+
 public class Course {
+    private int id;
     private String courseName;
+    private Date beginDate;
+    private Date startDate;
     private double presence;
     private double absence;
 
@@ -22,11 +27,11 @@ public class Course {
     }
 
 
-    public String getClassName() {
+    public String getCourseName() {
         return courseName;
     }
 
-    public void setClassName(String courseName) {
+    public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
 
