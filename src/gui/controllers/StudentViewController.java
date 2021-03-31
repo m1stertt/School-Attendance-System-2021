@@ -10,7 +10,6 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -20,6 +19,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -66,38 +66,39 @@ public class StudentViewController implements Initializable {
             group.relocate(108,-1+40*i);
             //The 40*i is the important part^ to make the list work, it defines how far down on the list this grouping will be and places it accordingly.
 
-            Button button1=new Button("ABSENT");
-            button1.relocate(31,7);
-            button1.setStyle("-fx-background-color:#ff0000");
+            Button button1=new Button("PRESENT");
+            button1.relocate(116,7);
+            button1.setStyle("-fx-background-color:green");
             group.getChildren().add(button1);
 
-            Button button2=new Button("PRESENT");
-            button2.relocate(116,7);
-            button2.setStyle("-fx-background-color:green");
-            group.getChildren().add(button2);
-
             Label label=new Label(courses.get(i));
-            label.setStyle("-fx-text-fill:black;-fx-font-size:16px;");
-            label.relocate(-96,7);
+            label.setStyle("-fx-text-fill:black;-fx-font-size:14px;");
+            label.relocate(-100,10);
             group.getChildren().add(label);
 
-            Line line=new Line(-119,0,196,0); //@todo positioning needs to be better. off atm.
-            line.relocate(12,39);
+            Line line=new Line(-119,0,185,0); //@todo positioning needs to be better. off atm.
+            line.relocate(-100,39);
             group.getChildren().add(line);
 
-            setButtonEvents(button1,button2); //Set events for "blurring" buttons on click and clearing the opposite button of any blur.
-            setButtonEvents(button2,button1);
+            setButtonEvents(button1); //Set events for "blurring" buttons on click and clearing the opposite button of any blur.
             anchorPane.getChildren().add(group);
         }
         anchorPane.setMinSize(320,40*courses.size()); //This makes sure scroll appears if necessary, calculating the proper height for the pane, so the scrollPane will react.
     }
 
-    public void setButtonEvents(Button button1,Button button2){
+    public void setButtonEvents(Button button1) {
         button1.setOnAction(e->{
             button1.setDisable(true);
-            button2.setDisable(false);
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            LocalDateTime now = LocalDateTime.now();
+            System.out.println(dtf.format(now));
         });
     }
+
+//    public boolean isWithinRange(Date testDate) {
+//        return !(testDate.before(startDate) || testDate.after(endDate));
+//    }
 
     public void drawPieChartData() {
         ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(

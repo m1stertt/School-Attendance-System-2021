@@ -105,7 +105,7 @@ public class TeacherViewController implements Initializable {
         studentFirstName.setMaxWidth(90);
         studentLastName.setMaxWidth(90);
         summarizedAttendance.setMaxWidth(85);
-        initializeStudents();
+//        initializeStudents();
     }
 
 
