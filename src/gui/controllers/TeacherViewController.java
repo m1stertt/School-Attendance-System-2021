@@ -9,10 +9,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,7 +24,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -29,6 +36,7 @@ import java.util.ResourceBundle;
 
 public class TeacherViewController implements Initializable {
 
+    public Button moreStudentInfo;
     @FXML
     private PieChart attendancePieChart;
     @FXML
@@ -134,4 +142,29 @@ public class TeacherViewController implements Initializable {
         studentAttendanceChart.getData().clear();
         studentAttendanceChart.getData().add(studRegManager.getSummarizedStudentWeekDayData());
     }
+
+    public void getsStudentInfo() throws IOException {
+        Student selectedStudent = studentsTableView.getSelectionModel().getSelectedItem();
+        if(selectedStudent == null) return;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/StudentInformationView.fxml"));
+        Parent root = loader.load();
+        StudentInformationController controller = loader.getController();
+        controller.attendanceEdit(selectedStudent);
+        handleStageGeneral(root);
+        //todo add something that updates the absence tables if student attendance is changed
+
+    }
+    private void handleStageGeneral(Parent root) {
+
+        Scene scene = new Scene(root);
+        scene.setFill(null);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        //stage.initStyle(StageStyle.TRANSPARENT);
+        stage.showAndWait();
+
+    }
+
+
 }

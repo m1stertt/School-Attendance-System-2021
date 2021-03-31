@@ -43,5 +43,6 @@
         </yAxis>
       </AreaChart>
       <Label fx:id="currentTime" layoutX="533.0" layoutY="72.0" text="Label" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="55.0" />
+      <Button fx:id="moreStudentInfo" layoutX="220.0" layoutY="106.0" mnemonicParsing="false" onAction="#getsStudentInfo" text="Student Info" />
    </children>
 </AnchorPane>
