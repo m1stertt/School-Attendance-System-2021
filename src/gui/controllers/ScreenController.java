@@ -56,7 +56,7 @@ public class ScreenController {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ScreenController.class.getResource("/gui/views/LoginView.fxml"));
             AnchorPane userLogin = (AnchorPane) loader.load();
-            setStageOptions(366, 468, userLogin);
+            setStageOptions(366, 465, userLogin);
 
         } catch (IOException e) {
             e.printStackTrace();

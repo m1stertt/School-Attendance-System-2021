@@ -18,8 +18,10 @@ import javafx.scene.shape.Line;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -33,7 +35,8 @@ public class StudentViewController implements Initializable {
     private ImageView EASV;
     @FXML
     private DatePicker datePicker;
-    @FXML private AnchorPane anchorPane;
+    @FXML
+    private AnchorPane anchorPane;
 
     private ScreenController screenController;
     private StudRegManager studRegManager;
@@ -51,67 +54,73 @@ public class StudentViewController implements Initializable {
         createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue()));
     }
 
-    public void handleDatePicker(){
+    public void handleDatePicker() {
         datePicker.setValue(LocalDate.now()); //Set initial value
         datePicker.valueProperty().addListener((ov, oldValue, newValue) -> { //Listen for changes in the datePicker
             createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue())); //Update list of courses to reflect new date.
         });
     }
 
-    public void createCoursesView(List<String> courses){
+    public void createCoursesView(List<String> courses) {
         anchorPane.getChildren().clear();
-        for(int i=0;i<courses.size();i++){
+        for (int i = 0; i < courses.size(); i++) {
             //Create buttons
-            Group group=new Group();
-            group.relocate(108,-1+40*i);
+            Group group = new Group();
+            group.relocate(108, -1 + 40 * i);
             //The 40*i is the important part^ to make the list work, it defines how far down on the list this grouping will be and places it accordingly.
 
-            Button button1=new Button("PRESENT");
-            button1.relocate(116,7);
+            Button button1 = new Button("PRESENT");
+            button1.relocate(116, 7);
             button1.setStyle("-fx-background-color:green");
             group.getChildren().add(button1);
 
-            Label label=new Label(courses.get(i));
+            Label label = new Label(courses.get(i));
             label.setStyle("-fx-text-fill:black;-fx-font-size:14px;");
-            label.relocate(-100,10);
+            label.relocate(-100, 10);
             group.getChildren().add(label);
 
-            Line line=new Line(-119,0,185,0); //@todo positioning needs to be better. off atm.
-            line.relocate(-100,39);
+            Line line = new Line(-119, 0, 185, 0); //@todo positioning needs to be better. off atm.
+            line.relocate(-100, 39);
             group.getChildren().add(line);
 
-            setButtonEvents(button1); //Set events for "blurring" buttons on click and clearing the opposite button of any blur.
+            setButtonEvents(button1, label); //Set events for "blurring" buttons on click and clearing the opposite button of any blur.
             anchorPane.getChildren().add(group);
         }
-        anchorPane.setMinSize(320,40*courses.size()); //This makes sure scroll appears if necessary, calculating the proper height for the pane, so the scrollPane will react.
+        anchorPane.setMinSize(320, 40 * courses.size()); //This makes sure scroll appears if necessary, calculating the proper height for the pane, so the scrollPane will react.
     }
 
-    public void setButtonEvents(Button button1) {
-        button1.setOnAction(e->{
-            button1.setDisable(true);
-
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            LocalDateTime now = LocalDateTime.now();
-            System.out.println(dtf.format(now));
+    public void setButtonEvents(Button button1, Label label1) {
+        button1.setOnAction(e -> {
+            HashMap<String, ArrayList<LocalTime>> courseTimes = studRegManager.getCourseTime(datePicker.getValue());
+            courseTimes.forEach((s, dates) -> {
+                if ((label1.getText().contains(s)) && isWithinRange(dates.get(0), dates.get(1))) {
+                    button1.setDisable(true);
+                }
+            });
         });
     }
 
-//    public boolean isWithinRange(Date testDate) {
-//        return !(testDate.before(startDate) || testDate.after(endDate));
-//    }
+    public boolean isWithinRange(LocalTime startTime, LocalTime endTime) {
+        LocalTime now = LocalTime.now();
+        if (now.isAfter(startTime) && now.isBefore((endTime))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public void drawPieChartData() {
         ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
-            new PieChart.Data("Present", 85),
-            new PieChart.Data("Absent", 15)
+                new PieChart.Data("Present", 85),
+                new PieChart.Data("Absent", 15)
         );
         attendancePieChart.setData(attendancePieChartData);
     }
 
-    public void timeDisplayed(){
+    public void timeDisplayed() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         LocalDateTime now = LocalDateTime.now();
-        currentTime.setText("Current Time: "+dtf.format(now));
+        currentTime.setText("Current Time: " + dtf.format(now));
     }
 
     public void addImage() {

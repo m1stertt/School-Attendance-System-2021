@@ -9,7 +9,9 @@ import javafx.scene.chart.XYChart;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -73,8 +75,40 @@ public class StudRegDAO {
         return courses;
     }
 
+    /** This method is used to check if
+     * student register in the correct timeframe of the lesson.
+     * @param day to check for.
+     * @return a HashMap containing a String key with the name of the lesson
+     * each key is related to a list containing the start and end time of the lesson.
+     */
+    public HashMap<String, ArrayList<LocalTime>> getCourseTime(Integer day){
+        HashMap<String, ArrayList<LocalTime>> courseTimes = new HashMap<>();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT c.Name, CDOW.StartTime, CDOW.EndTime " +
+                    "FROM Courses AS C " +
+                    "INNER JOIN CoursesDayOfWeek AS CDOW ON c.Id = CDOW.CourseId " +
+                    "WHERE CDOW.Weekday = ?;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, day);
+            ResultSet rs = pstmt.executeQuery();
+            DateFormat df = new SimpleDateFormat("H:mm");
+            while (rs.next()) {
+                LocalTime startTime = rs.getObject("StartTime", LocalTime.class);
+                LocalTime endTime = rs.getObject("EndTime", LocalTime.class);
+                String course = rs.getString("Name");
+                ArrayList<LocalTime> startAndEndTimes = new ArrayList();
+                startAndEndTimes.add(startTime);
+                startAndEndTimes.add(endTime);
+                courseTimes.put(course, startAndEndTimes);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return courseTimes;
+    }
 
-    public XYChart.Series getSummarizedStudentWeekDayData() {
+
+        public XYChart.Series getSummarizedStudentWeekDayData() {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Student Attendance");
         Random r = new Random();

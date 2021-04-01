@@ -7,7 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,4 +37,8 @@ public class StudRegManager {
         return studRegDAO.getSummarizedStudentWeekDayData();
     }
 
+    public HashMap<String, ArrayList<LocalTime>> getCourseTime(LocalDate localDate) {
+        Integer day=localDate.getDayOfWeek().getValue();
+        return studRegDAO.getCourseTime(day);
+    }
 }
