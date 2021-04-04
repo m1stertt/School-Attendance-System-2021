@@ -41,4 +41,8 @@ public class StudRegManager {
         Integer day=localDate.getDayOfWeek().getValue();
         return studRegDAO.getCourseTime(day);
     }
+
+    public int getCourseDaysInPeriod(String s) {
+        return studRegDAO.getCourseDaysInSemesterCourse(s);
+    }
 }

@@ -50,6 +50,7 @@ public class StudentViewController implements Initializable {
         drawPieChartData();
         handleDatePicker();
 
+
         studRegManager = new StudRegManager();
         createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue()));
     }
