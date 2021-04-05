@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -9,11 +12,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="350.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginViewController">
+<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="350.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.LoginViewController">
     <children>
         <Label id="SchoolA" alignment="TOP_CENTER" layoutX="99.0" layoutY="94.0" stylesheets="@../css/Main.css" text="School Attendance" AnchorPane.topAnchor="94.0">
             <font>
@@ -70,5 +74,18 @@
       <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" />
       <Button fx:id="showPassword" layoutX="284.0" layoutY="310.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onShowPassword" prefHeight="10.0" prefWidth="25.0" styleClass="visiblePassWord" AnchorPane.topAnchor="304.0" />
       <Button fx:id="hidePassword" layoutX="284.0" layoutY="310.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onHidePassword" prefHeight="10.0" prefWidth="25.0" styleClass="nonVisiblePassword" visible="false" AnchorPane.topAnchor="302.0" />
+      <HBox layoutX="93.0" layoutY="386.0" prefHeight="25.0" prefWidth="200.0" spacing="15.0">
+         <children>
+            <Label text="Role:" />
+            <JFXComboBox fx:id="roleComboBox" prefHeight="25.0" prefWidth="101.0" unFocusColor="#4059a9">
+             <items>
+                 <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Student" />
+                     <String fx:value="Teacher" />
+                 </FXCollections>
+             </items>
+             </JFXComboBox>
+         </children>
+      </HBox>
     </children>
 </AnchorPane>

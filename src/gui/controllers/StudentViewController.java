@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import bll.LoginSession;
 import bll.StudRegManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +38,8 @@ public class StudentViewController implements Initializable {
     private DatePicker datePicker;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private Label displayStudentName;
 
     private ScreenController screenController;
     private StudRegManager studRegManager;
@@ -49,6 +52,7 @@ public class StudentViewController implements Initializable {
         timeDisplayed();
         drawPieChartData();
         handleDatePicker();
+        displayStudentName.setText(LoginSession.getUserName());
 
 
         studRegManager = new StudRegManager();
@@ -103,7 +107,10 @@ public class StudentViewController implements Initializable {
 
     public boolean isWithinRange(LocalTime startTime, LocalTime endTime) {
         LocalTime now = LocalTime.now();
-        if (now.isAfter(startTime) && now.isBefore((endTime))) {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime currentDate = LocalDateTime.now();
+        if (now.isAfter(startTime) && now.isBefore((endTime)) && dtf.format(currentDate).equals(String.valueOf(datePicker.getValue()))) {
             return true;
         } else {
             return false;
@@ -130,7 +137,8 @@ public class StudentViewController implements Initializable {
     }
 
     @FXML
-    void closesStudent() {
+    void logoutStudent() {
         screenController.setLoginInView();
+        LoginSession.setIsLoggedIn(false);
     }
 }

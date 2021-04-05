@@ -2,6 +2,7 @@ package dal;
 
 import be.Course;
 import be.Student;
+import bll.LoginSession;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
@@ -24,7 +25,7 @@ public class StudRegDAO {
     private DBConnector dataSource;
 
 
-    public ObservableList<Student> getAllStudents(){
+    public ObservableList<Student> getAllStudents() {
         Random r = new Random();
         double totalCourses = 100;
 
@@ -126,6 +127,7 @@ public class StudRegDAO {
     /**
      * This method calculates how many course days there are in
      * a semester course.
+     *
      * @param courseName Name of the course to calculate the days from.
      * @return An integer with the total course days for a semester.
      */
@@ -153,19 +155,19 @@ public class StudRegDAO {
                 for (int i : courseWeekDays) {
                     switch (i) {
                         case 1:
-                            totalLessons = totalLessons +  rs.getInt("MON");
+                            totalLessons = totalLessons + rs.getInt("MON");
                             break;
                         case 2:
-                            totalLessons = totalLessons +  rs.getInt("TUE");
+                            totalLessons = totalLessons + rs.getInt("TUE");
                             break;
                         case 3:
-                            totalLessons = totalLessons +  rs.getInt("WED");
+                            totalLessons = totalLessons + rs.getInt("WED");
                             break;
                         case 4:
-                            totalLessons = totalLessons +  rs.getInt("THU");
+                            totalLessons = totalLessons + rs.getInt("THU");
                             break;
                         case 5:
-                            totalLessons = totalLessons +  rs.getInt("FRI");
+                            totalLessons = totalLessons + rs.getInt("FRI");
                             break;
                     }
                 }
@@ -179,6 +181,7 @@ public class StudRegDAO {
     /**
      * Helper method for the getCourseDaysInSemesterCourse to
      * get the start and end date for a specific course.
+     *
      * @param courseName Name of the course to get the dates from.
      * @return Start and end date of the course.
      */
@@ -206,6 +209,7 @@ public class StudRegDAO {
     /**
      * Helper method for the getCourseDaysInSemesterCourse to
      * get the days in which a course has lessons.
+     *
      * @param courseName Name of the course to get days from.
      * @return An ArrayList of Integers which hold the dates
      * 1 is equal to monday, 2 is equal to tuesday etc.
@@ -228,6 +232,32 @@ public class StudRegDAO {
             throwables.printStackTrace();
         }
         return courseWeekDays;
+    }
+
+    public boolean checkLogin(String username, String password, String Role) {
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT U.Id , U.Username, U.Password " +
+                    "FROM [USER] AS U " +
+                    "WHERE U.Username = ? " +
+                    "AND U.Password = ? " +
+                    "AND U.Role = ?;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            pstmt.setString(3, Role);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                LoginSession.setUserId(rs.getInt("Id"));
+                LoginSession.setUserName(rs.getString("Username"));
+                LoginSession.setIsLoggedIn(true);
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
 
 

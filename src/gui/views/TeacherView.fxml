@@ -20,7 +20,7 @@
             <BoxBlur iterations="0" />
          </effect></JFXComboBox>
       <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="5.0" />
-      <Button fx:id="closeTeacher" layoutX="534.0" layoutY="14.0" mnemonicParsing="false" onAction="#closesTeacher" text="Log Out" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+      <Button fx:id="closeTeacher" layoutX="534.0" layoutY="14.0" mnemonicParsing="false" onAction="#logoutTeacher" text="Log Out" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
       <Label layoutX="453.0" layoutY="27.0" text="Teacher" />
       <PieChart fx:id="attendancePieChart" layoutX="33.0" layoutY="356.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="208.0" prefWidth="288.0" title="Overall Class Attendance:" />
       <Label layoutX="60.0" layoutY="118.0" text="Class:" />

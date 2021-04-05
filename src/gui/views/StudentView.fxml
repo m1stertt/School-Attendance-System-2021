@@ -7,12 +7,12 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane id="background" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.StudentViewController">
    <children>
       <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="20.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="5.0" />
-      <Button fx:id="closeStudent" layoutX="524.0" layoutY="21.0" mnemonicParsing="false" onAction="#closesStudent" text="Log Out" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-      <Label fx:id="displayStudentName" layoutX="458.0" layoutY="27.0" text="Student" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="closeStudent" layoutX="524.0" layoutY="21.0" mnemonicParsing="false" onAction="#logoutStudent" text="Log Out" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
       <Label fx:id="currentTime" layoutX="523.0" layoutY="62.0" text="Label" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="55.0" />
       <DatePicker fx:id="datePicker" layoutX="54.0" layoutY="97.0" />
       <Label layoutX="20.0" layoutY="100.0" prefHeight="17.0" prefWidth="35.0" text="Date:" />
@@ -22,5 +22,11 @@
         </content>
       </ScrollPane>
       <PieChart fx:id="attendancePieChart" layoutX="369.0" layoutY="95.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="261.0" prefWidth="215.0" title="Overall Attendance:" />
+      <HBox layoutX="333.0" layoutY="23.0" prefHeight="25.0" prefWidth="175.0" spacing="10.0">
+         <children>
+            <Label text="Logged in as:" />
+            <Label fx:id="displayStudentName" text="Student" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

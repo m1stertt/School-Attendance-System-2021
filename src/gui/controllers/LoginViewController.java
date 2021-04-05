@@ -1,7 +1,10 @@
 package gui.controllers;
 
+import com.jfoenix.controls.JFXComboBox;
+import gui.models.StudRegModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -24,6 +27,8 @@ public class LoginViewController implements Initializable {
     private Button showPassword;
     @FXML
     private Button hidePassword;
+    @FXML
+    private JFXComboBox<String> roleComboBox;
 
 
     @FXML
@@ -31,26 +36,39 @@ public class LoginViewController implements Initializable {
 
     private ScreenController screenController;
 
+    private StudRegModel studRegModel = new StudRegModel();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addImage();
         screenController = ScreenController.getInstance();
+        roleComboBox.getSelectionModel().selectFirst();
+
     }
 
     @FXML
     public void attendanceLogin() {
-        String username = usernameField.getText().toLowerCase();
+        try {
+            String userName = usernameField.getText();
+            String password = passwordField.getText();
+            String role = roleComboBox.getSelectionModel().getSelectedItem();
+            if(studRegModel.checkLogin(userName, password, role) && role.equalsIgnoreCase("student")){
+                screenController.setStudentView();
+            }
+            else if ((studRegModel.checkLogin(userName, password, role) && role.equalsIgnoreCase("teacher"))){
+                screenController.setTeacherView();
+            }
+            else throw new Exception();
 
-        if (username.equals("teacher")) {
-            screenController.setTeacherView();
-        } else if(username.equals("student")){
-            screenController.setStudentView();
-        } else {
-            return;
+    } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Login Failed");
+            alert.setContentText("Please enter correct Username and Password and/or check your login Role.");
+            alert.showAndWait();
         }
     }
 
-    @FXML
+        @FXML
     public void onShowPassword() {
         passwordField.setVisible(false);
         passwordTextField.setVisible(true);

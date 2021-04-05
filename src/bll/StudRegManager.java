@@ -20,29 +20,33 @@ public class StudRegManager {
     private StudRegDAO studRegDAO = new StudRegDAO();
 
 
-    public ObservableList<Student> getAllStudents(){
+    public ObservableList<Student> getAllStudents() {
         return studRegDAO.getAllStudents();
     }
 
-    public List<Course> getAllCourses(){
+    public List<Course> getAllCourses() {
         return studRegDAO.getAllCourses();
     }
 
-    public List<String> getCoursesStringForDay(LocalDate localDate){
-        Integer day=localDate.getDayOfWeek().getValue();
+    public List<String> getCoursesStringForDay(LocalDate localDate) {
+        Integer day = localDate.getDayOfWeek().getValue();
         return studRegDAO.getCoursesStringForDay(day);
     }
 
-    public XYChart.Series getSummarizedStudentWeekDayData(){
+    public XYChart.Series getSummarizedStudentWeekDayData() {
         return studRegDAO.getSummarizedStudentWeekDayData();
     }
 
     public HashMap<String, ArrayList<LocalTime>> getCourseTime(LocalDate localDate) {
-        Integer day=localDate.getDayOfWeek().getValue();
+        Integer day = localDate.getDayOfWeek().getValue();
         return studRegDAO.getCourseTime(day);
     }
 
     public int getCourseDaysInPeriod(String s) {
         return studRegDAO.getCourseDaysInSemesterCourse(s);
+    }
+
+    public boolean checkLogin(String userName, String password, String role) {
+        return studRegDAO.checkLogin(userName, password, role);
     }
 }

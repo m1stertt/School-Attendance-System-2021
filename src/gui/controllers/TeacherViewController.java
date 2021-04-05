@@ -2,6 +2,7 @@ package gui.controllers;
 
 import be.Course;
 import be.Student;
+import bll.LoginSession;
 import bll.StudRegManager;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,7 +26,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -130,8 +130,9 @@ public class TeacherViewController implements Initializable {
     }
 
     @FXML
-    void closesTeacher() {
+    void logoutTeacher() {
         screenController.setLoginInView();
+        LoginSession.setIsLoggedIn(false);
     }
 
     public void onComboboxSelect(ActionEvent actionEvent) {
