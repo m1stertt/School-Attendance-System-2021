@@ -70,6 +70,7 @@ public class TeacherViewController implements Initializable {
         drawPieChartData();
         drawAreaChartData();
         timeDisplayed();
+        initializeStudents();
     }
 
     public void drawPieChartData() {

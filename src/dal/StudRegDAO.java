@@ -26,20 +26,20 @@ public class StudRegDAO {
 
 
     public ObservableList<Student> getAllStudents() {
-        Random r = new Random();
-        double totalCourses = 100;
+        List<Student> students = new ArrayList<>();
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT u.Id, u.Username, u.FirstName, u.LastName FROM [User] AS u WHERE u.Role='Student'";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
 
-        ObservableList<Student> studentData = FXCollections.observableArrayList(
-
-//                new Student("Peter", "Hansen", r.nextInt(10) / totalCourses),
-//                new Student("Ole", "Petersen", r.nextInt(10) / totalCourses),
-//                new Student("Allan", "Olsen", r.nextInt(10) / totalCourses),
-//                new Student("Jesper", "Allansen", r.nextInt(10) / totalCourses),
-//                new Student("Casper", "Jespersen", r.nextInt(10) / totalCourses),
-//                new Student("Nikolaj", "Caspersen", r.nextInt(10) / totalCourses),
-//                new Student("Clark", "Nikolajsen", r.nextInt(10) / totalCourses)
-        );
-        return studentData;
+            while (rs.next()) {
+                students.add(new Student(rs.getInt("Id"),rs.getString("FirstName"),rs.getString("LastName"),0.0));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return FXCollections.observableArrayList(students);
     }
 
 
@@ -259,6 +259,4 @@ public class StudRegDAO {
         }
         return false;
     }
-
-
 }
