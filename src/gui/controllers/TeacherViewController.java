@@ -67,19 +67,19 @@ public class TeacherViewController implements Initializable {
         initializeStudentViewDisplay();
         initializeCourses();
         courseComboCheckBox.getSelectionModel().selectFirst();
-        drawPieChartData();
+//        drawPieChartData();
         drawAreaChartData();
         timeDisplayed();
         initializeStudents();
     }
 
-    public void drawPieChartData() {
-        ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Present", courseComboCheckBox.getSelectionModel().getSelectedItem().getPresence()),
-                new PieChart.Data("Absent", courseComboCheckBox.getSelectionModel().getSelectedItem().getAbsence())
-        );
-        attendancePieChart.setData(attendancePieChartData);
-    }
+//    public void drawPieChartData() {
+//        ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
+//                new PieChart.Data("Present", courseComboCheckBox.getSelectionModel().getSelectedItem().getPresence()),
+//                new PieChart.Data("Absent", courseComboCheckBox.getSelectionModel().getSelectedItem().getAbsence())
+//        );
+//        attendancePieChart.setData(attendancePieChartData);
+//    }
 
     public void drawAreaChartData() {
         Axis<String> xAxis = studentAttendanceChart.getXAxis();
@@ -137,7 +137,7 @@ public class TeacherViewController implements Initializable {
     }
 
     public void onComboboxSelect(ActionEvent actionEvent) {
-        drawPieChartData();
+//        drawPieChartData();
     }
 
     public void onStudentSelected(MouseEvent mouseEvent) {

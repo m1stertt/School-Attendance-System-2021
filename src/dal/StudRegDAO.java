@@ -8,13 +8,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 
 import java.sql.*;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Static MockDAO.
@@ -34,7 +33,7 @@ public class StudRegDAO {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                students.add(new Student(rs.getInt("Id"),rs.getString("FirstName"),rs.getString("LastName"),0.0));
+                students.add(new Student(rs.getInt("Id"), rs.getString("FirstName"), rs.getString("LastName"), 0.0));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -42,13 +41,65 @@ public class StudRegDAO {
         return FXCollections.observableArrayList(students);
     }
 
-
     public List<Course> getAllCourses() {
-        ObservableList<Course> classData = FXCollections.observableArrayList(
-                new Course("SCO2.B.21", 75, 25),
-                new Course("SDE2.B.21", 85, 15)
-        );
-        return classData;
+        ObservableList<Course> courses = FXCollections.observableArrayList();
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT C.Id, C.[Name], C.StartDate, C.EndDate " +
+                    "FROM Courses AS C;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Integer id = rs.getInt("Id");
+                String name = rs.getString("Name");
+                Date startDate = rs.getDate("StartDate");
+                Date endDate = rs.getDate("EndDate");
+                courses.add(new Course(id, name, startDate,endDate));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return courses;
+    }
+
+    public void registerAttendance(String courseName) {
+        int courseId = getCourseId(courseName);
+        Calendar cal = Calendar.getInstance();
+        java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+
+            String sql = "INSERT INTO StudentLessonAttendance (StudentId, CourseId, RegisterTime, [Status]) " +
+                    "VALUES (?, ?, ?, ?);";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, LoginSession.getUserId());
+            pstmt.setInt(2, courseId);
+            pstmt.setTimestamp(3, timestamp);
+            pstmt.setBoolean(4, true);
+            pstmt.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    private Integer getCourseId(String courseName){
+        dataSource = new DBConnector();
+        try(Connection con = dataSource.getConnection()){
+            String sql = "SELECT C.Id " +
+                    "FROM Courses AS C " +
+                    "WHERE C.Name = ?;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, courseName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 
     public List<String> getCoursesStringForDay(Integer day) {

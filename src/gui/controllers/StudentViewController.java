@@ -100,6 +100,12 @@ public class StudentViewController implements Initializable {
             courseTimes.forEach((s, dates) -> {
                 if ((label1.getText().contains(s)) && isWithinRange(dates.get(0), dates.get(1))) {
                     button1.setDisable(true);
+                    studRegManager.getAllCourses().forEach(course -> {
+                        if (label1.getText().contains(course.getCourseName())){
+                            studRegManager.attendanceRegister(course);
+                        }
+                    });
+
                 }
             });
         });

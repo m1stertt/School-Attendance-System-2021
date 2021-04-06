@@ -49,4 +49,8 @@ public class StudRegManager {
     public boolean checkLogin(String userName, String password, String role) {
         return studRegDAO.checkLogin(userName, password, role);
     }
+
+    public void attendanceRegister(Course course) {
+        studRegDAO.registerAttendance(course.getCourseName());
+    }
 }
