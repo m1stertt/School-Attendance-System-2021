@@ -12,6 +12,7 @@ public class Student extends User {
         this.absence = new SimpleDoubleProperty(absence);
     }
 
+
     public double getAbsence() {
         return absence.get();
     }

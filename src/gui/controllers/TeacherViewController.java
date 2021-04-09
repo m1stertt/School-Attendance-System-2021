@@ -68,7 +68,7 @@ public class TeacherViewController implements Initializable {
         initializeCourses();
         courseComboCheckBox.getSelectionModel().selectFirst();
 //        drawPieChartData();
-        drawAreaChartData();
+//        drawAreaChartData();
         timeDisplayed();
         initializeStudents();
     }
@@ -81,14 +81,14 @@ public class TeacherViewController implements Initializable {
 //        attendancePieChart.setData(attendancePieChartData);
 //    }
 
-    public void drawAreaChartData() {
-        Axis<String> xAxis = studentAttendanceChart.getXAxis();
-        xAxis.setTickLabelRotation(10);
-        Axis<String> yAxis = studentAttendanceChart.getYAxis();
-        yAxis.setLabel("Absence shown as lessons");
-
-        studentAttendanceChart.getData().add(studRegManager.getSummarizedStudentWeekDayData());
-    }
+//    public void drawAreaChartData() {
+//        Axis<String> xAxis = studentAttendanceChart.getXAxis();
+//        xAxis.setTickLabelRotation(10);
+//        Axis<String> yAxis = studentAttendanceChart.getYAxis();
+//        yAxis.setLabel("Absence shown as lessons");
+//
+//        studentAttendanceChart.getData().add(studRegManager.getSummarizedStudentWeekDayData());
+//    }
 
     public void initializeStudents() {
         studentsTableView.setItems(studRegManager.getAllStudents());
@@ -141,8 +141,8 @@ public class TeacherViewController implements Initializable {
     }
 
     public void onStudentSelected(MouseEvent mouseEvent) {
-        studentAttendanceChart.getData().clear();
-        studentAttendanceChart.getData().add(studRegManager.getSummarizedStudentWeekDayData());
+        //studentAttendanceChart.getData().clear();
+        //studentAttendanceChart.getData().add(studRegManager.getSummarizedStudentWeekDayData());
     }
 
     public void getsStudentInfo() throws IOException {
@@ -152,6 +152,7 @@ public class TeacherViewController implements Initializable {
         Parent root = loader.load();
         StudentInformationController controller = loader.getController();
         controller.attendanceEdit(selectedStudent);
+        controller.studentName(selectedStudent);
         handleStageGeneral(root);
         //todo add something that updates the absence tables if student attendance is changed
 
