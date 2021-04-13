@@ -18,7 +18,7 @@
          </effect></JFXComboBox>
       <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="5.0" />
       <Button fx:id="closeTeacher" layoutX="534.0" layoutY="14.0" mnemonicParsing="false" onAction="#logoutTeacher" text="Log Out" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-      <Label layoutX="453.0" layoutY="27.0" text="Teacher" />
+      <Label fx:id="displayTeacherName" layoutX="453.0" layoutY="27.0" text="Teacher" />
       <PieChart fx:id="attendancePieChart" layoutX="438.0" layoutY="135.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="208.0" prefWidth="288.0" title="Overall Class Attendance:" />
       <Label layoutX="52.0" layoutY="110.0" text="Class:" />
       <TableView fx:id="studentsTableView" layoutX="33.0" layoutY="147.0" onMouseClicked="#onStudentSelected" prefHeight="423.0" prefWidth="300.0">
@@ -31,7 +31,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Label fx:id="currentTime" layoutX="533.0" layoutY="72.0" text="Label" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="55.0" />
+      <Label fx:id="currentTimeOfLogin" layoutX="533.0" layoutY="72.0" text="Label" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="55.0" />
       <Button fx:id="moreStudentInfo" layoutX="244.0" layoutY="106.0" mnemonicParsing="false" onAction="#getsStudentInfo" text="Student Info" />
    </children>
 </AnchorPane>

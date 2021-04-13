@@ -10,7 +10,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -54,6 +53,7 @@ public class LoginViewController implements Initializable {
             String role = roleComboBox.getSelectionModel().getSelectedItem();
             if(studRegModel.checkLogin(userName, password, role) && role.equalsIgnoreCase("student")){
                 screenController.setStudentView();
+
             }
             else if ((studRegModel.checkLogin(userName, password, role) && role.equalsIgnoreCase("teacher"))){
                 screenController.setTeacherView();

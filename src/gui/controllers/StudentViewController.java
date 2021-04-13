@@ -1,7 +1,9 @@
 package gui.controllers;
 
+import be.Student;
 import bll.LoginSession;
 import bll.StudRegManager;
+import gui.models.CurrentTimeClock;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,7 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
-
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class StudentViewController implements Initializable {
     @FXML
     private PieChart attendancePieChart;
     @FXML
-    private Label currentTime;
+    private Label currentTimeOfLogin;
     @FXML
     private ImageView EASV;
     @FXML
@@ -44,20 +45,22 @@ public class StudentViewController implements Initializable {
     private ScreenController screenController;
     private StudRegManager studRegManager;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addImage();
         screenController = ScreenController.getInstance();
-        timeDisplayed();
+        displayClock();
         drawPieChartData();
         handleDatePicker();
         displayStudentName.setText(LoginSession.getUserName());
+        //todo display student name and not login  name
 
 
         studRegManager = new StudRegManager();
         createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue()));
     }
+
+
 
     public void handleDatePicker() {
         datePicker.setValue(LocalDate.now()); //Set initial value
@@ -131,10 +134,16 @@ public class StudentViewController implements Initializable {
         attendancePieChart.setData(attendancePieChartData);
     }
 
-    public void timeDisplayed() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
-        LocalDateTime now = LocalDateTime.now();
-        currentTime.setText("Current Time: " + dtf.format(now));
+//    private void initClock() {
+//        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
+//            currentTimeOfLogin.setText("Current Time: "+LocalDateTime.now().format(formatter));
+//        }), new KeyFrame(Duration.seconds(1)));
+//        clock.setCycleCount(Animation.INDEFINITE);
+//        clock.play();
+//    }
+    private void displayClock() {
+        CurrentTimeClock.getInstance().initClock(currentTimeOfLogin);
     }
 
     public void addImage() {
