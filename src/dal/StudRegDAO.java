@@ -24,17 +24,19 @@ public class StudRegDAO {
     private DBConnector dataSource;
 
 
-    public ObservableList<Student> getAllStudents() {
+    public ObservableList<Student> getAllStudents(int courseId) {
         List<Student> students = new ArrayList<>();
         dataSource = new DBConnector();
-
+        double allLessonsInCourse = getCourseDaysInSemesterCourse(courseId);
         try (Connection con = dataSource.getConnection()) {
             String sql = "SELECT u.Id, u.Username, u.FirstName, u.LastName FROM [User] AS u WHERE u.Role='Student'";
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
-
             while (rs.next()) {
-                students.add(new Student(rs.getInt("Id"), rs.getString("FirstName"), rs.getString("LastName"), 0.0));
+                int studentId = rs.getInt("Id");
+                    double studentAbsence = getStudentAttendanceDaysInSemesterCourse(courseId,studentId);
+                students.add(new Student(studentId, rs.getString("FirstName"), rs.getString("LastName"), studentAbsence/allLessonsInCourse));
+
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -103,16 +105,16 @@ public class StudRegDAO {
         return null;
     }
 
-    public Integer getStudentAttendanceDaysInSemesterCourse(String courseName) {
+    public Integer getStudentAttendanceDaysInSemesterCourse(int courseId, int studentId) {
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
             String sql = "SELECT COUNT(*) AS TotalCourseAttendanceDays " +
                     "FROM StudentLessonAttendance AS SLA " +
-                    "WHERE SLA.CourseId = (SELECT C.Id " +
-                    "FROM Courses AS C " +
-                    "WHERE C.Name =?)";
+                    "WHERE SLA.CourseId = ? " +
+                    "AND SLA.StudentId = ?;";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, courseName);
+            pstmt.setInt(1, courseId);
+            pstmt.setInt(2,studentId);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt("TotalCourseAttendanceDays");
@@ -200,12 +202,12 @@ public class StudRegDAO {
      * This method calculates how many course days there are in
      * a semester course.
      *
-     * @param courseName Name of the course to calculate the days from.
+     * @param id Name of the course to calculate the days from.
      * @return An integer with the total course days for a semester.
      */
-    public Integer getCourseDaysInSemesterCourse(String courseName) {
-        HashMap<String, Date> startAndEndDate = getCourseStartAndEndDate(courseName);
-        ArrayList<Integer> courseWeekDays = getCourseLessonDays(courseName);
+    public Integer getCourseDaysInSemesterCourse(int id) {
+        HashMap<String, Date> startAndEndDate = getCourseStartAndEndDate(id);
+        ArrayList<Integer> courseWeekDays = getCourseLessonDays(id);
         int totalLessons = 0;
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
@@ -254,17 +256,17 @@ public class StudRegDAO {
      * Helper method for the getCourseDaysInSemesterCourse to
      * get the start and end date for a specific course.
      *
-     * @param courseName Name of the course to get the dates from.
+     * @param id Name of the course to get the dates from.
      * @return Start and end date of the course.
      */
-    private HashMap<String, Date> getCourseStartAndEndDate(String courseName) {
+    private HashMap<String, Date> getCourseStartAndEndDate(int id) {
         HashMap<String, Date> startAndEndDates = new HashMap<>();
         try (Connection con = dataSource.getConnection()) {
             String sql = "SELECT c.Name, c.StartDate, c.EndDate " +
                     "FROM Courses AS c " +
-                    "WHERE c.Name = ?";
+                    "WHERE c.Id = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, courseName);
+            pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Date startDate = rs.getDate("StartDate");
@@ -282,19 +284,19 @@ public class StudRegDAO {
      * Helper method for the getCourseDaysInSemesterCourse to
      * get the days in which a course has lessons.
      *
-     * @param courseName Name of the course to get days from.
+     * @param id Name of the course to get days from.
      * @return An ArrayList of Integers which hold the dates
      * 1 is equal to monday, 2 is equal to tuesday etc.
      */
-    private ArrayList<Integer> getCourseLessonDays(String courseName) {
+    private ArrayList<Integer> getCourseLessonDays(int id) {
         ArrayList<Integer> courseWeekDays = new ArrayList<>();
         try (Connection con = dataSource.getConnection()) {
             String sql = "SELECT CDOW.Weekday " +
                     "FROM CoursesDayOfWeek AS CDOW " +
                     "INNER JOIN Courses AS C ON CDOW.CourseId = c.Id " +
-                    "WHERE C.Name = ?;";
+                    "WHERE C.Id = ?;";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, courseName);
+            pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Integer weekDay = rs.getInt("WeekDay");

@@ -14,6 +14,7 @@ public class DBConnector {
         dataSource = new SQLServerDataSource();
         dataSource.setServerName("10.176.111.31");
         dataSource.setDatabaseName("SchoolAttendanceSystem");
+        dataSource.setSendStringParametersAsUnicode(false);
         dataSource.setUser("Cse20B_24");
         dataSource.setPassword("hunden123");
         dataSource.setPortNumber(1433);

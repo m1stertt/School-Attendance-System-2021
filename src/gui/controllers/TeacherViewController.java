@@ -72,7 +72,7 @@ public class TeacherViewController implements Initializable {
         initializeStudentViewDisplay();
         initializeCourses();
         courseComboCheckBox.getSelectionModel().selectFirst();
-        initializeStudents();
+        runGetStudentsThread();
         displayClock();
     }
 
@@ -95,7 +95,7 @@ public class TeacherViewController implements Initializable {
 //    }
 
     public void initializeStudents() {
-        studentsTableView.setItems(studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getCourseName()));
+        studentsTableView.setItems(studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId()));
         summarizedAttendance.setSortType(TableColumn.SortType.DESCENDING);
         studentsTableView.getSortOrder().setAll(summarizedAttendance);
     }
@@ -134,10 +134,15 @@ public class TeacherViewController implements Initializable {
     }
 
     public void onComboboxSelect(ActionEvent actionEvent) {
+        runGetStudentsThread();
+    }
+
+    public void runGetStudentsThread() {
         Task<ObservableList<Student>> task = new Task<>() {
             @Override
             public ObservableList<Student> call() throws Exception {
-                return studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getCourseName());
+                return studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+
             }
         };
         task.setOnFailed(e -> {
@@ -147,11 +152,7 @@ public class TeacherViewController implements Initializable {
                 studentsTableView.setItems(task.getValue()));
 
         executorService.submit(task);
-//        studentsTableView.setItems(studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getCourseName()));
     }
-
-
-
 
 
     public void onStudentSelected(MouseEvent mouseEvent) {

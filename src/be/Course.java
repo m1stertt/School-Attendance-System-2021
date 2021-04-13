@@ -45,6 +45,7 @@ public class Course {
     }
 
     public Course(int id, String courseName, Date startDate, Date endDate) {
+        this.id = id;
         this.courseName = courseName;
         this.startDate = startDate;
         this.endDate = endDate;

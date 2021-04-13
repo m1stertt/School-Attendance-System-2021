@@ -23,15 +23,9 @@ public class StudRegManager {
     private StudRegDAO studRegDAO = new StudRegDAO();
 
 
-    public ObservableList<Student> getAllStudents(String courseName) {
-            double allLessonsInCourse = studRegDAO.getCourseDaysInSemesterCourse(courseName);
-            ObservableList<Student> allStudents = studRegDAO.getAllStudents();
-            allStudents.forEach(student -> {
-                double studentAbsence = studRegDAO.getStudentAttendanceDaysInSemesterCourse(courseName);
-                student.setAbsence(studentAbsence / allLessonsInCourse);
-            });
-        return allStudents;
-        }
+    public ObservableList<Student> getAllStudents(int id) {
+        return studRegDAO.getAllStudents(id);
+    }
 
 
 
@@ -53,8 +47,8 @@ public class StudRegManager {
         return studRegDAO.getCourseTime(day);
     }
 
-    public int getCourseDaysInPeriod(String s) {
-        return studRegDAO.getCourseDaysInSemesterCourse(s);
+    public int getCourseDaysInPeriod(int id) {
+        return studRegDAO.getCourseDaysInSemesterCourse(id);
     }
 
     public boolean checkLogin(String userName, String password, String role) {
