@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
+
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,7 +62,6 @@ public class StudentViewController implements Initializable {
     }
 
 
-
     public void handleDatePicker() {
         datePicker.setValue(LocalDate.now()); //Set initial value
         datePicker.valueProperty().addListener((ov, oldValue, newValue) -> { //Listen for changes in the datePicker
@@ -104,11 +104,10 @@ public class StudentViewController implements Initializable {
                 if ((label1.getText().contains(s)) && isWithinRange(dates.get(0), dates.get(1))) {
                     button1.setDisable(true);
                     studRegManager.getAllCourses().forEach(course -> {
-                        if (label1.getText().contains(course.getCourseName())){
+                        if (label1.getText().contains(course.getCourseName())) {
                             studRegManager.attendanceRegister(course);
                         }
                     });
-
                 }
             });
         });
@@ -134,14 +133,6 @@ public class StudentViewController implements Initializable {
         attendancePieChart.setData(attendancePieChartData);
     }
 
-//    private void initClock() {
-//        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
-//            currentTimeOfLogin.setText("Current Time: "+LocalDateTime.now().format(formatter));
-//        }), new KeyFrame(Duration.seconds(1)));
-//        clock.setCycleCount(Animation.INDEFINITE);
-//        clock.play();
-//    }
     private void displayClock() {
         CurrentTimeClock.getInstance().initClock(currentTimeOfLogin);
     }

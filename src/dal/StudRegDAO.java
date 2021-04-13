@@ -27,6 +27,7 @@ public class StudRegDAO {
     public ObservableList<Student> getAllStudents() {
         List<Student> students = new ArrayList<>();
         dataSource = new DBConnector();
+
         try (Connection con = dataSource.getConnection()) {
             String sql = "SELECT u.Id, u.Username, u.FirstName, u.LastName FROM [User] AS u WHERE u.Role='Student'";
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -55,7 +56,7 @@ public class StudRegDAO {
                 String name = rs.getString("Name");
                 Date startDate = rs.getDate("StartDate");
                 Date endDate = rs.getDate("EndDate");
-                courses.add(new Course(id, name, startDate,endDate));
+                courses.add(new Course(id, name, startDate, endDate));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -84,9 +85,9 @@ public class StudRegDAO {
         }
     }
 
-    private Integer getCourseId(String courseName){
+    private Integer getCourseId(String courseName) {
         dataSource = new DBConnector();
-        try(Connection con = dataSource.getConnection()){
+        try (Connection con = dataSource.getConnection()) {
             String sql = "SELECT C.Id " +
                     "FROM Courses AS C " +
                     "WHERE C.Name = ?;";
@@ -95,6 +96,26 @@ public class StudRegDAO {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt("id");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public Integer getStudentAttendanceDaysInSemesterCourse(String courseName) {
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT COUNT(*) AS TotalCourseAttendanceDays " +
+                    "FROM StudentLessonAttendance AS SLA " +
+                    "WHERE SLA.CourseId = (SELECT C.Id " +
+                    "FROM Courses AS C " +
+                    "WHERE C.Name =?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, courseName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("TotalCourseAttendanceDays");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

@@ -8,6 +8,8 @@ import bll.StudRegManager;
 import com.jfoenix.controls.JFXComboBox;
 import gui.models.CurrentTimeClock;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,12 +27,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class TeacherViewController implements Initializable{
+public class TeacherViewController implements Initializable {
 
     @FXML
     private Label displayTeacherName;
@@ -57,7 +62,7 @@ public class TeacherViewController implements Initializable{
 
     private ScreenController screenController;
     private StudRegManager studRegManager;
-
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,14 +72,9 @@ public class TeacherViewController implements Initializable{
         initializeStudentViewDisplay();
         initializeCourses();
         courseComboCheckBox.getSelectionModel().selectFirst();
-//        drawPieChartData();
-//        drawAreaChartData();
-        displayClock();
         initializeStudents();
-        //displayTeacherName
-        //todo display teacher name and not login  name
+        displayClock();
     }
-
 
 
 //    public void drawPieChartData() {
@@ -95,7 +95,7 @@ public class TeacherViewController implements Initializable{
 //    }
 
     public void initializeStudents() {
-        studentsTableView.setItems(studRegManager.getAllStudents());
+        studentsTableView.setItems(studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getCourseName()));
         summarizedAttendance.setSortType(TableColumn.SortType.DESCENDING);
         studentsTableView.getSortOrder().setAll(summarizedAttendance);
     }
@@ -116,7 +116,6 @@ public class TeacherViewController implements Initializable{
         studentFirstName.setMaxWidth(90);
         studentLastName.setMaxWidth(90);
         summarizedAttendance.setMaxWidth(85);
-//        initializeStudents();
     }
 
     private void displayClock() {
@@ -135,8 +134,25 @@ public class TeacherViewController implements Initializable{
     }
 
     public void onComboboxSelect(ActionEvent actionEvent) {
-//        drawPieChartData();
+        Task<ObservableList<Student>> task = new Task<>() {
+            @Override
+            public ObservableList<Student> call() throws Exception {
+                return studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getCourseName());
+            }
+        };
+        task.setOnFailed(e -> {
+            task.getException().printStackTrace();
+        });
+        task.setOnSucceeded(e ->
+                studentsTableView.setItems(task.getValue()));
+
+        executorService.submit(task);
+//        studentsTableView.setItems(studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getCourseName()));
     }
+
+
+
+
 
     public void onStudentSelected(MouseEvent mouseEvent) {
         //studentAttendanceChart.getData().clear();
@@ -145,7 +161,7 @@ public class TeacherViewController implements Initializable{
 
     public void getsStudentInfo() throws IOException {
         Student selectedStudent = studentsTableView.getSelectionModel().getSelectedItem();
-        if(selectedStudent == null) return;
+        if (selectedStudent == null) return;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/StudentInformationView.fxml"));
         Parent root = loader.load();
         StudentInformationController controller = loader.getController();
@@ -154,6 +170,7 @@ public class TeacherViewController implements Initializable{
         handleStageGeneral(root);
 
     }
+
     private void handleStageGeneral(Parent root) {
 
         Scene scene = new Scene(root);
