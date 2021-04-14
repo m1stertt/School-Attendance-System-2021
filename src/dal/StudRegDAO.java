@@ -301,7 +301,7 @@ public class StudRegDAO {
      * get the days in which a course has lessons.
      *
      * @param id Name of the course to get days from.
-     * @return An ArrayList of Integers which hold the dates
+     * @return An ArrayList of Integers which hold the days
      * 1 is equal to monday, 2 is equal to tuesday etc.
      */
     private ArrayList<Integer> getCourseLessonDays(int id) {
