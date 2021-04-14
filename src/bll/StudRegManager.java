@@ -27,6 +27,13 @@ public class StudRegManager {
         return studRegDAO.getAllStudents(id);
     }
 
+    public ObservableList<Student> getAllStudentsCalculatedAbsence(int id) {
+        int courseDaysInSemester = studRegDAO.getCourseDaysInSemesterCourse(id);
+        ObservableList<Student> allStudents = studRegDAO.getAllStudents(id);
+        allStudents.forEach(student -> student.setAbsence(student.getAbsence()/courseDaysInSemester*100));
+        return allStudents;
+    }
+
 
 
     public List<Course> getAllCourses() {
@@ -47,7 +54,7 @@ public class StudRegManager {
         return studRegDAO.getCourseTime(day);
     }
 
-    public int getCourseDaysInPeriod(int id) {
+    public int getCourseDaysInSemesterCourse(int id) {
         return studRegDAO.getCourseDaysInSemesterCourse(id);
     }
 

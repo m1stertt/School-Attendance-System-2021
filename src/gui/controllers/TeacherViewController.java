@@ -6,7 +6,8 @@ import bll.LoginSession;
 import bll.StudRegManager;
 import com.jfoenix.controls.JFXComboBox;
 import gui.models.CurrentTimeClock;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -26,8 +27,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -60,6 +60,7 @@ public class TeacherViewController implements Initializable {
     private ScreenController screenController;
     private StudRegManager studRegManager;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private ObservableList<Student> allStudents = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -73,22 +74,28 @@ public class TeacherViewController implements Initializable {
     }
 
 
-//    public void drawPieChartData() {
-//        ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
-//                new PieChart.Data("Present", courseComboCheckBox.getSelectionModel().getSelectedItem().getPresence()),
-//                new PieChart.Data("Absent", courseComboCheckBox.getSelectionModel().getSelectedItem().getAbsence())
-//        );
-//        attendancePieChart.setData(attendancePieChartData);
-//    }
+    public void drawPieChartData() {
+        ObservableList<Student> allStudents = studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+        int studentCounter = 0;
+        double totalStudentAttendanceDays = 0;
+        for (Student s : allStudents) {
+            studentCounter++;
+            totalStudentAttendanceDays = totalStudentAttendanceDays + s.getAbsence();
+        }
+        double average = totalStudentAttendanceDays / studentCounter;
+        double allLessonsInCourse = studRegManager.getCourseDaysInSemesterCourse(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+        ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Presence", average),
+                new PieChart.Data("Absence", allLessonsInCourse-average)
 
-//    public void drawAreaChartData() {
-//        Axis<String> xAxis = studentAttendanceChart.getXAxis();
-//        xAxis.setTickLabelRotation(10);
-//        Axis<String> yAxis = studentAttendanceChart.getYAxis();
-//        yAxis.setLabel("Absence shown as lessons");
-//
-//        studentAttendanceChart.getData().add(studRegManager.getSummarizedStudentWeekDayData());
-//    }
+        );
+        System.out.println(studentCounter);
+        System.out.println(totalStudentAttendanceDays);
+        System.out.println(average);
+        System.out.println(allLessonsInCourse);
+        attendancePieChart.setData(attendancePieChartData);
+    }
+
 
     public void initializeStudents() {
         runGetStudentsThread();
@@ -139,32 +146,27 @@ public class TeacherViewController implements Initializable {
 
     public void onComboboxSelect(ActionEvent actionEvent) {
         runGetStudentsThread();
-
+        drawPieChartData();
     }
 
     public void runGetStudentsThread() {
         Task<ObservableList<Student>> task = new Task<>() {
             @Override
             public ObservableList<Student> call() throws Exception {
-                return studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+                return studRegManager.getAllStudentsCalculatedAbsence(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
             }
         };
         task.setOnFailed(e -> {
             task.getException().printStackTrace();
         });
         task.setOnSucceeded(e -> {
-            studentsTableView.setItems(task.getValue());
+            allStudents = task.getValue();
+            studentsTableView.setItems(allStudents);
             summarizedAttendance.setSortType(TableColumn.SortType.ASCENDING);
             studentsTableView.getSortOrder().add(summarizedAttendance);
             studentsTableView.sort();
         });
-            executorService.submit(task);
-        }
-
-
-    public void onStudentSelected(MouseEvent mouseEvent) {
-        //studentAttendanceChart.getData().clear();
-        //studentAttendanceChart.getData().add(studRegManager.getSummarizedStudentWeekDayData());
+        executorService.submit(task);
     }
 
     public void getsStudentInfo() throws IOException {
@@ -174,13 +176,11 @@ public class TeacherViewController implements Initializable {
         Parent root = loader.load();
         StudentInformationController controller = loader.getController();
         controller.attendanceEdit(selectedStudent);
-        controller.studentName(selectedStudent);
         handleStageGeneral(root);
 
     }
 
     private void handleStageGeneral(Parent root) {
-
         Scene scene = new Scene(root);
         scene.setFill(null);
         Stage stage = new Stage();

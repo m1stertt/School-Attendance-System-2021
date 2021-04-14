@@ -39,19 +39,11 @@ public class StudentInformationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         drawStudentAttendenceChart();
+        studentNameDisplay.setText(selectedStudent.getFirstName()+" "+selectedStudent.getLastName());
     }
 
-    public void studentName(Student student){
-        String firstName = student.getFirstName();
-        String lastName = student.getLastName();
-
-        studentNameDisplay.setText(firstName+" "+lastName);
-    }
 
     public void savesAndCloses(ActionEvent actionEvent) {
-
-        //todo add code to save and close the window
-
         Stage window = (Stage) closesWindow.getScene().getWindow();
         window.close();
 

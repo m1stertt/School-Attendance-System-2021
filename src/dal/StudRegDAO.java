@@ -29,7 +29,6 @@ public class StudRegDAO {
         List<Student> students = new ArrayList<>();
         DecimalFormat df = new DecimalFormat();
         dataSource = new DBConnector();
-        double allLessonsInCourse = getCourseDaysInSemesterCourse(courseId);
         try (Connection con = dataSource.getConnection()) {
             String sql = "SELECT u.Id, u.Username, u.FirstName, u.LastName FROM [User] AS u WHERE u.Role='Student'";
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -37,7 +36,7 @@ public class StudRegDAO {
             while (rs.next()) {
                 int studentId = rs.getInt("Id");
                     double studentAbsence = getStudentAttendanceDaysInSemesterCourse(courseId,studentId);
-                students.add(new Student(studentId, rs.getString("FirstName"), rs.getString("LastName"), (studentAbsence/allLessonsInCourse*100)));
+                students.add(new Student(studentId, rs.getString("FirstName"), rs.getString("LastName"), studentAbsence));
 
             }
         } catch (SQLException throwables) {
@@ -210,7 +209,6 @@ public class StudRegDAO {
     public Integer getCourseDaysInSemesterCourse(int id) {
         HashMap<String, Date> startAndEndDate = getCourseStartAndEndDate(id);
         ArrayList<Integer> courseWeekDays = getCourseLessonDays(id);
-        courseWeekDays.forEach(integer -> System.out.println(integer));
         int totalLessons = 0;
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
