@@ -66,6 +66,29 @@ public class StudRegDAO {
         return courses;
     }
 
+    public List<Course> getAllCourses(int studentID) {
+        ObservableList<Course> courses = FXCollections.observableArrayList();
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT C.Id, C.[Name], C.StartDate, C.EndDate " +
+                    "FROM Courses AS C JOIN StudentCourses as SC ON C.Id = SC.CourseID AND SC.StudentID = ?;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1,studentID);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Integer id = rs.getInt("Id");
+                String name = rs.getString("Name");
+                Date startDate = rs.getDate("StartDate");
+                Date endDate = rs.getDate("EndDate");
+                courses.add(new Course(id, name, startDate, endDate));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return courses;
+    }
+
     public void registerAttendance(String courseName) {
         int courseId = getCourseId(courseName);
         Calendar cal = Calendar.getInstance();
@@ -224,6 +247,53 @@ public class StudRegDAO {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setDate(1, startAndEndDate.get("startDate"));
             pstmt.setDate(2, startAndEndDate.get("endDate"));
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                for (int i : courseWeekDays) {
+                    switch (i) {
+                        case 1:
+                            totalLessons = totalLessons + rs.getInt("MON");
+                            break;
+                        case 2:
+                            totalLessons = totalLessons + rs.getInt("TUE");
+                            break;
+                        case 3:
+                            totalLessons = totalLessons + rs.getInt("WED");
+                            break;
+                        case 4:
+                            totalLessons = totalLessons + rs.getInt("THU");
+                            break;
+                        case 5:
+                            totalLessons = totalLessons + rs.getInt("FRI");
+                            break;
+                    }
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return totalLessons;
+    }
+
+    public Integer getCourseDaysInSemesterCourseUntilNow(int id) {
+        HashMap<String, Date> startAndEndDate = getCourseStartAndEndDate(id);
+        ArrayList<Integer> courseWeekDays = getCourseLessonDays(id);
+        int totalLessons = 0;
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "declare @from datetime= ? " +
+                    "declare @to datetime  = ? " +
+                    "select" +
+                    " datediff(day, -7, @to)/7-datediff(day, -6, @from)/7 AS MON," +
+                    " datediff(day, -6, @to)/7-datediff(day, -5, @from)/7 AS TUE," +
+                    " datediff(day, -5, @to)/7-datediff(day, -4, @from)/7 AS WED," +
+                    " datediff(day, -4, @to)/7-datediff(day, -3, @from)/7 AS THU," +
+                    " datediff(day, -3, @to)/7-datediff(day, -2, @from)/7 AS FRI," +
+                    " datediff(day, -2, @to)/7-datediff(day, -1, @from)/7 AS SAT," +
+                    " datediff(day, -1, @to)/7-datediff(day, 0, @from)/7 AS SUN";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setDate(1, startAndEndDate.get("startDate"));
+            pstmt.setDate(2, new Date(new java.util.Date().getTime()));
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 for (int i : courseWeekDays) {

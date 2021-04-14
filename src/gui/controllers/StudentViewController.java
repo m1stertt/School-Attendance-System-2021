@@ -48,6 +48,7 @@ public class StudentViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        studRegManager = new StudRegManager();
         addImage();
         screenController = ScreenController.getInstance();
         displayClock();
@@ -57,7 +58,6 @@ public class StudentViewController implements Initializable {
         //todo display student name and not login  name
 
 
-        studRegManager = new StudRegManager();
         createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue()));
     }
 
@@ -126,9 +126,10 @@ public class StudentViewController implements Initializable {
     }
 
     public void drawPieChartData() {
+        double d=studRegManager.getAbsenceData(LoginSession.getUserId());
         ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Present", 85),
-                new PieChart.Data("Absent", 15)
+                new PieChart.Data("Present", d),
+                new PieChart.Data("Absent", 1-d)
         );
         attendancePieChart.setData(attendancePieChartData);
     }

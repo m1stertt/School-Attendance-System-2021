@@ -10,6 +10,7 @@ import javafx.scene.chart.XYChart;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -45,6 +46,17 @@ public class StudRegManager {
     public HashMap<String, ArrayList<LocalTime>> getCourseTime(LocalDate localDate) {
         Integer day = localDate.getDayOfWeek().getValue();
         return studRegDAO.getCourseTime(day);
+    }
+
+    //Returns a double representing the percentage of how present the student is. 0.24=24% attendance etc.
+    public double getAbsenceData(int studentID){
+        List<Course> courses=studRegDAO.getAllCourses(studentID);
+        double sum=0;
+        for(Course course:courses){
+            sum+=(double)studRegDAO.getStudentAttendanceDaysInSemesterCourse(course.getId(),studentID)/studRegDAO.getCourseDaysInSemesterCourseUntilNow(course.getId());
+        }
+        double d=sum/courses.size();
+        return d;
     }
 
     public int getCourseDaysInPeriod(int id) {
