@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
@@ -69,6 +70,7 @@ public class TeacherViewController implements Initializable {
         initializeCourses();
         initializeStudents();
         displayClock();
+        runGetStudentsThread();
     }
 
 
@@ -76,18 +78,10 @@ public class TeacherViewController implements Initializable {
         Task<ObservableList<PieChart.Data>> task = new Task<>() {
             @Override
             public ObservableList<PieChart.Data> call() throws Exception {
-                List<Student> allStudents = studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
-                int studentCounter = 0;
-                double totalStudentAttendanceDays = 0;
-                for (Student s : allStudents) {
-                    studentCounter++;
-                    totalStudentAttendanceDays += s.getAbsence();
-                }
-                double average = totalStudentAttendanceDays / studentCounter;
-                double allLessonsInCourse = studRegManager.getCourseDaysInSemesterCourseUntilNow(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+                HashMap<String, Double> courseAbsenceData = studRegManager.getCourseAbsenceDate(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
                 ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
-                        new PieChart.Data("Presence", average),
-                        new PieChart.Data("Absence", allLessonsInCourse-average)
+                        new PieChart.Data("Presence", courseAbsenceData.get("classAverageStudentAttendance")),
+                        new PieChart.Data("Absence", courseAbsenceData.get("allLessonsInCourse")-courseAbsenceData.get("classAverageStudentAttendance"))
                 );
                 return attendancePieChartData;
             }

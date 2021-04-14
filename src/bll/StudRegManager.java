@@ -46,6 +46,22 @@ public class StudRegManager {
         return studRegDAO.getCourseTime(day);
     }
 
+    public HashMap<String, Double> getCourseAbsenceDate(int courseId){
+        HashMap<String, Double> courseAbsenceData = new HashMap<>();
+        List<Student> allStudents = studRegDAO.getAllStudents(courseId);
+        int studentCounter = 0;
+        double totalStudentAttendanceDays = 0;
+        for (Student s : allStudents) {
+            studentCounter++;
+            totalStudentAttendanceDays += s.getAbsence();
+        }
+        double classAverageStudentAttendance = totalStudentAttendanceDays / studentCounter;
+        double allLessonsInCourse = studRegDAO.getCourseDaysInSemesterCourseUntilNow(courseId);
+        courseAbsenceData.put("classAverageStudentAttendance", classAverageStudentAttendance);
+        courseAbsenceData.put("allLessonsInCourse", allLessonsInCourse);
+        return courseAbsenceData;
+    }
+
     public int getCourseDaysInSemesterCourseUntilNow(int id) {
         return studRegDAO.getCourseDaysInSemesterCourseUntilNow(id);
     }
