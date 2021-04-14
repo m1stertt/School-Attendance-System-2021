@@ -6,7 +6,6 @@ import bll.LoginSession;
 import bll.StudRegManager;
 import com.jfoenix.controls.JFXComboBox;
 import gui.models.CurrentTimeClock;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -22,12 +21,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -59,7 +56,7 @@ public class TeacherViewController implements Initializable {
 
     private ScreenController screenController;
     private StudRegManager studRegManager;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private ExecutorService executorService = Executors.newFixedThreadPool(2);
     private ObservableList<Student> allStudents = FXCollections.observableArrayList();
 
     @Override
@@ -75,25 +72,32 @@ public class TeacherViewController implements Initializable {
 
 
     public void drawPieChartData() {
-        ObservableList<Student> allStudents = studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
-        int studentCounter = 0;
-        double totalStudentAttendanceDays = 0;
-        for (Student s : allStudents) {
-            studentCounter++;
-            totalStudentAttendanceDays = totalStudentAttendanceDays + s.getAbsence();
-        }
-        double average = totalStudentAttendanceDays / studentCounter;
-        double allLessonsInCourse = studRegManager.getCourseDaysInSemesterCourse(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
-        ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Presence", average),
-                new PieChart.Data("Absence", allLessonsInCourse-average)
-
-        );
-        System.out.println(studentCounter);
-        System.out.println(totalStudentAttendanceDays);
-        System.out.println(average);
-        System.out.println(allLessonsInCourse);
-        attendancePieChart.setData(attendancePieChartData);
+        Task<ObservableList<PieChart.Data>> task = new Task<>() {
+            @Override
+            public ObservableList<PieChart.Data> call() throws Exception {
+                ObservableList<Student> allStudents = studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+                int studentCounter = 0;
+                double totalStudentAttendanceDays = 0;
+                for (Student s : allStudents) {
+                    studentCounter++;
+                    totalStudentAttendanceDays += s.getAbsence();
+                }
+                double average = totalStudentAttendanceDays / studentCounter;
+                double allLessonsInCourse = studRegManager.getCourseDaysInSemesterCourseUntilNow(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+                ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
+                        new PieChart.Data("Presence", average),
+                        new PieChart.Data("Absence", allLessonsInCourse-average)
+                );
+                return attendancePieChartData;
+            }
+        };
+        task.setOnFailed(e -> {
+            task.getException().printStackTrace();
+        });
+        task.setOnSucceeded(e -> {
+            attendancePieChart.setData(task.getValue());
+        });
+        executorService.submit(task);
     }
 
 
