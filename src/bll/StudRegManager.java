@@ -12,26 +12,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Simple BLL pass-through layer.
- */
+
 public class StudRegManager {
 
     private StudRegDAO studRegDAO = new StudRegDAO();
 
-    public ObservableList<Student> getAllStudents(int id) {
+    public List<Student> getAllStudents(int id) {
         return studRegDAO.getAllStudents(id);
     }
 
-    public ObservableList<Student> getAllStudentsCalculatedAbsence(int id) {
+    public List<Student> getAllStudentsCalculatedAbsence(int id) {
         int courseDaysInSemester = studRegDAO.getCourseDaysInSemesterCourseUntilNow(id);
-        ObservableList<Student> allStudents = studRegDAO.getAllStudents(id);
+        List<Student> allStudents = studRegDAO.getAllStudents(id);
         allStudents.forEach(student -> student.setAbsence(student.getAbsence()/courseDaysInSemester*100));
         return allStudents;
     }
 
     public List<Course> getAllCourses() {
-        return studRegDAO.getAllStudentCourses();
+        return studRegDAO.getAllCourses();
     }
 
     public List<String> getCoursesStringForDay(LocalDate localDate) {
@@ -67,6 +65,6 @@ public class StudRegManager {
     }
 
     public void attendanceRegister(Course course) {
-        studRegDAO.registerAttendance(course.getCourseName());
+        studRegDAO.registerAttendance(course.getId());
     }
 }

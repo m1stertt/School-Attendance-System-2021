@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -71,11 +72,11 @@ public class TeacherViewController implements Initializable {
     }
 
 
-    public void drawPieChartData() {
+    public void runDrawPieChartDataThread() {
         Task<ObservableList<PieChart.Data>> task = new Task<>() {
             @Override
             public ObservableList<PieChart.Data> call() throws Exception {
-                ObservableList<Student> allStudents = studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+                List<Student> allStudents = studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
                 int studentCounter = 0;
                 double totalStudentAttendanceDays = 0;
                 for (Student s : allStudents) {
@@ -150,13 +151,13 @@ public class TeacherViewController implements Initializable {
 
     public void onComboboxSelect(ActionEvent actionEvent) {
         runGetStudentsThread();
-        drawPieChartData();
+        runDrawPieChartDataThread();
     }
 
     public void runGetStudentsThread() {
-        Task<ObservableList<Student>> task = new Task<>() {
+        Task<List<Student>> task = new Task<>() {
             @Override
-            public ObservableList<Student> call() throws Exception {
+            public List<Student> call() throws Exception {
                 return studRegManager.getAllStudentsCalculatedAbsence(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
             }
         };
@@ -164,7 +165,7 @@ public class TeacherViewController implements Initializable {
             task.getException().printStackTrace();
         });
         task.setOnSucceeded(e -> {
-            allStudents = task.getValue();
+            allStudents.addAll(FXCollections.observableArrayList(task.getValue()));
             studentsTableView.setItems(allStudents);
             summarizedAttendance.setSortType(TableColumn.SortType.ASCENDING);
             studentsTableView.getSortOrder().add(summarizedAttendance);
@@ -180,6 +181,8 @@ public class TeacherViewController implements Initializable {
         Parent root = loader.load();
         StudentInformationController controller = loader.getController();
         controller.attendanceEdit(selectedStudent);
+
+
         handleStageGeneral(root);
 
     }

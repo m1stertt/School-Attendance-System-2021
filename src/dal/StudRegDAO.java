@@ -10,7 +10,6 @@ import javafx.scene.chart.XYChart;
 import java.sql.Date;
 import java.sql.*;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.*;
@@ -19,10 +18,13 @@ public class StudRegDAO {
 
     private DBConnector dataSource;
 
-
-    public ObservableList<Student> getAllStudents(int courseId) {
+    /**
+     * This method is used to get all students related to a course.
+     * @param courseId id of the course.
+     * @return a list of all students
+     */
+    public List<Student> getAllStudents(int courseId) {
         List<Student> students = new ArrayList<>();
-        DecimalFormat df = new DecimalFormat();
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
             String sql = "SELECT u.Id, u.Username, u.FirstName, u.LastName FROM [User] AS u WHERE u.Role='Student'";
@@ -44,7 +46,7 @@ public class StudRegDAO {
      * Method to get all courses.
      * @return a list of all courses registered in database.
      */
-    public List<Course> getAllStudentCourses() {
+    public List<Course> getAllCourses() {
         ObservableList<Course> courses = FXCollections.observableArrayList();
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
@@ -92,8 +94,7 @@ public class StudRegDAO {
         return courses;
     }
 
-    public void registerAttendance(String courseName) {
-        int courseId = getCourseId(courseName);
+    public void registerAttendance(int courseId) {
         Calendar cal = Calendar.getInstance();
         java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
         dataSource = new DBConnector();
@@ -113,23 +114,6 @@ public class StudRegDAO {
         }
     }
 
-    private Integer getCourseId(String courseName) {
-        dataSource = new DBConnector();
-        try (Connection con = dataSource.getConnection()) {
-            String sql = "SELECT C.Id " +
-                    "FROM Courses AS C " +
-                    "WHERE C.Name = ?;";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, courseName);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("id");
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return null;
-    }
 
     public Integer getStudentAttendanceDaysInSemesterCourse(int courseId, int studentId) {
         dataSource = new DBConnector();
@@ -231,62 +215,15 @@ public class StudRegDAO {
     }
 
     /**
-     * This method calculates how many course days there are in
-     * a semester course.
+     * This database call method calculates how many course days there are in
+     * a semester course up until the current date.
      *
-     * @param id Name of the course to calculate the days from.
+     * @param courseId courseId of the course to calculate the days from.
      * @return An integer with the total course days for a semester.
      */
-//    public Integer getCourseDaysInSemesterCourse(int id) {
-//        HashMap<String, Date> startAndEndDate = getCourseStartAndEndDate(id);
-//        ArrayList<Integer> courseWeekDays = getCourseLessonDays(id);
-//        int totalLessons = 0;
-//        dataSource = new DBConnector();
-//        try (Connection con = dataSource.getConnection()) {
-//            String sql = "declare @from datetime= ? " +
-//                    "declare @to datetime  = ? " +
-//                    "select" +
-//                    " datediff(day, -7, @to)/7-datediff(day, -6, @from)/7 AS MON," +
-//                    " datediff(day, -6, @to)/7-datediff(day, -5, @from)/7 AS TUE," +
-//                    " datediff(day, -5, @to)/7-datediff(day, -4, @from)/7 AS WED," +
-//                    " datediff(day, -4, @to)/7-datediff(day, -3, @from)/7 AS THU," +
-//                    " datediff(day, -3, @to)/7-datediff(day, -2, @from)/7 AS FRI," +
-//                    " datediff(day, -2, @to)/7-datediff(day, -1, @from)/7 AS SAT," +
-//                    " datediff(day, -1, @to)/7-datediff(day, 0, @from)/7 AS SUN";
-//            PreparedStatement pstmt = con.prepareStatement(sql);
-//            pstmt.setDate(1, startAndEndDate.get("startDate"));
-//            pstmt.setDate(2, startAndEndDate.get("endDate"));
-//            ResultSet rs = pstmt.executeQuery();
-//            while (rs.next()) {
-//                for (int i : courseWeekDays) {
-//                    switch (i) {
-//                        case 1:
-//                            totalLessons = totalLessons + rs.getInt("MON");
-//                            break;
-//                        case 2:
-//                            totalLessons = totalLessons + rs.getInt("TUE");
-//                            break;
-//                        case 3:
-//                            totalLessons = totalLessons + rs.getInt("WED");
-//                            break;
-//                        case 4:
-//                            totalLessons = totalLessons + rs.getInt("THU");
-//                            break;
-//                        case 5:
-//                            totalLessons = totalLessons + rs.getInt("FRI");
-//                            break;
-//                    }
-//                }
-//            }
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//        return totalLessons;
-//    }
-
-    public Integer getCourseDaysInSemesterCourseUntilNow(int id) {
-        HashMap<String, Date> startAndEndDate = getCourseStartAndEndDate(id);
-        ArrayList<Integer> courseWeekDays = getCourseLessonDays(id);
+    public Integer getCourseDaysInSemesterCourseUntilNow(int courseId) {
+        HashMap<String, Date> startAndEndDate = getCourseStartAndEndDate(courseId);
+        ArrayList<Integer> courseWeekDays = getCourseLessonDays(courseId);
         int totalLessons = 0;
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {

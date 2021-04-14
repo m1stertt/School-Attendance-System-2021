@@ -30,7 +30,7 @@ public class StudentInformationController implements Initializable {
     private JFXButton closesWindow;
     @FXML
     private Label studentNameDisplay;
-    @FXML
+
     private Student selectedStudent;
 
     private StudRegManager studRegManager = new StudRegManager();
@@ -39,7 +39,7 @@ public class StudentInformationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         drawStudentAttendenceChart();
-        studentNameDisplay.setText(selectedStudent.getFirstName()+" "+selectedStudent.getLastName());
+
     }
 
 
@@ -52,11 +52,12 @@ public class StudentInformationController implements Initializable {
     public void setsAttendance(ActionEvent actionEvent) {
     }
 
-    public void attendanceEdit(Student student){
-    this.selectedStudent = student;
+    public void attendanceEdit(Student student) {
+        this.selectedStudent = student;
+        studentNameDisplay.setText(selectedStudent.getFirstName() + " " + selectedStudent.getLastName());
     }
 
-    public void drawStudentAttendenceChart(){
+    public void drawStudentAttendenceChart() {
         Axis<String> xAxis = absenceDisplay.getXAxis();
         xAxis.setTickLabelRotation(10);
         Axis<String> yAxis = absenceDisplay.getYAxis();
