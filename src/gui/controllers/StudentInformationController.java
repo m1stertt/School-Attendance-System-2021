@@ -30,6 +30,8 @@ public class StudentInformationController implements Initializable {
     private JFXButton closesWindow;
     @FXML
     private Label studentNameDisplay;
+    @FXML
+    private Student selectedStudent;
 
     private StudRegManager studRegManager = new StudRegManager();
 
@@ -37,10 +39,7 @@ public class StudentInformationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         drawStudentAttendenceChart();
-
     }
-
-
 
     public void studentName(Student student){
         String firstName = student.getFirstName();
@@ -62,9 +61,7 @@ public class StudentInformationController implements Initializable {
     }
 
     public void attendanceEdit(Student student){
-
-        //todo add stuff that allows editing of attendance
-
+    this.selectedStudent = student;
     }
 
     public void drawStudentAttendenceChart(){

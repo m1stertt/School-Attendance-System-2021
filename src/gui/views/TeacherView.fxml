@@ -10,7 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="background" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.TeacherViewController">
+<AnchorPane id="background" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.TeacherViewController">
    <children>
       <JFXComboBox fx:id="courseComboCheckBox" focusColor="#fbbb2c" layoutX="96.0" layoutY="98.0" minWidth="-Infinity" onAction="#onComboboxSelect" prefHeight="25.0" prefWidth="121.0" unFocusColor="#2f4b8f">
          <effect>
@@ -21,10 +21,10 @@
       <Label fx:id="displayTeacherName" layoutX="453.0" layoutY="27.0" text="Teacher" />
       <PieChart fx:id="attendancePieChart" layoutX="438.0" layoutY="135.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="208.0" prefWidth="288.0" title="Overall Class Attendance:" />
       <Label layoutX="52.0" layoutY="110.0" text="Class:" />
-      <TableView fx:id="studentsTableView" layoutX="33.0" layoutY="147.0" onMouseClicked="#onStudentSelected" prefHeight="423.0" prefWidth="300.0">
+      <TableView fx:id="studentsTableView" editable="true" layoutX="33.0" layoutY="147.0" onMouseClicked="#onStudentSelected" prefHeight="423.0" prefWidth="300.0">
         <columns>
-          <TableColumn fx:id="studentFirstName" prefWidth="98.0" text="Firstname" />
-            <TableColumn fx:id="studentLastName" prefWidth="78.0" text="Lastname" />
+          <TableColumn fx:id="studentFirstName" editable="false" prefWidth="98.0" sortable="false" text="Firstname" />
+            <TableColumn fx:id="studentLastName" editable="false" prefWidth="78.0" sortable="false" text="Lastname" />
           <TableColumn fx:id="summarizedAttendance" prefWidth="78.0" text="Summ Att." />
         </columns>
          <columnResizePolicy>

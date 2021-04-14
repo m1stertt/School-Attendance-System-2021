@@ -2,7 +2,6 @@ package gui.controllers;
 
 import be.Course;
 import be.Student;
-import be.Teacher;
 import bll.LoginSession;
 import bll.StudRegManager;
 import com.jfoenix.controls.JFXComboBox;
@@ -18,10 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +27,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,7 +49,7 @@ public class TeacherViewController implements Initializable {
     @FXML
     private TableColumn<Student, String> studentLastName;
     @FXML
-    public TableColumn<Student, String> summarizedAttendance;
+    public TableColumn<Student, Double> summarizedAttendance;
     @FXML
     private JFXComboBox<Course> courseComboCheckBox;
     @FXML
@@ -71,8 +68,7 @@ public class TeacherViewController implements Initializable {
         studRegManager = new StudRegManager();
         initializeStudentViewDisplay();
         initializeCourses();
-        courseComboCheckBox.getSelectionModel().selectFirst();
-        runGetStudentsThread();
+        initializeStudents();
         displayClock();
     }
 
@@ -95,9 +91,11 @@ public class TeacherViewController implements Initializable {
 //    }
 
     public void initializeStudents() {
-        studentsTableView.setItems(studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId()));
+        runGetStudentsThread();
+        courseComboCheckBox.getSelectionModel().selectFirst();
         summarizedAttendance.setSortType(TableColumn.SortType.DESCENDING);
-        studentsTableView.getSortOrder().setAll(summarizedAttendance);
+        studentsTableView.getSortOrder().add(summarizedAttendance);
+        studentsTableView.sort();
     }
 
     public void initializeCourses() {
@@ -106,12 +104,18 @@ public class TeacherViewController implements Initializable {
 
     public void initializeStudentViewDisplay() {
         //Set student columns.
-        DecimalFormat currency = new DecimalFormat(" 0.0%");
         studentFirstName.setCellValueFactory(new PropertyValueFactory<Student, String>("firstName"));
         studentLastName.setCellValueFactory(new PropertyValueFactory<Student, String>("lastName"));
-        summarizedAttendance.setCellValueFactory(cellData -> {
-            String formattedCost = currency.format(cellData.getValue().getAbsence());
-            return new SimpleStringProperty(formattedCost);
+        summarizedAttendance.setCellValueFactory(new PropertyValueFactory<>("absence"));
+        summarizedAttendance.setCellFactory(tc -> new TableCell<Student, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                if (empty) {
+                    setText("");
+                } else {
+                    setText(String.format("%.2f%%", price.doubleValue()));
+                }
+            }
         });
         studentFirstName.setMaxWidth(90);
         studentLastName.setMaxWidth(90);
@@ -135,6 +139,7 @@ public class TeacherViewController implements Initializable {
 
     public void onComboboxSelect(ActionEvent actionEvent) {
         runGetStudentsThread();
+
     }
 
     public void runGetStudentsThread() {
@@ -142,17 +147,19 @@ public class TeacherViewController implements Initializable {
             @Override
             public ObservableList<Student> call() throws Exception {
                 return studRegManager.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
-
             }
         };
         task.setOnFailed(e -> {
             task.getException().printStackTrace();
         });
-        task.setOnSucceeded(e ->
-                studentsTableView.setItems(task.getValue()));
-
-        executorService.submit(task);
-    }
+        task.setOnSucceeded(e -> {
+            studentsTableView.setItems(task.getValue());
+            summarizedAttendance.setSortType(TableColumn.SortType.ASCENDING);
+            studentsTableView.getSortOrder().add(summarizedAttendance);
+            studentsTableView.sort();
+        });
+            executorService.submit(task);
+        }
 
 
     public void onStudentSelected(MouseEvent mouseEvent) {

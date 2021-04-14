@@ -10,6 +10,7 @@ import javafx.scene.chart.XYChart;
 import java.sql.*;
 import java.sql.Date;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,6 +27,7 @@ public class StudRegDAO {
 
     public ObservableList<Student> getAllStudents(int courseId) {
         List<Student> students = new ArrayList<>();
+        DecimalFormat df = new DecimalFormat();
         dataSource = new DBConnector();
         double allLessonsInCourse = getCourseDaysInSemesterCourse(courseId);
         try (Connection con = dataSource.getConnection()) {
@@ -35,7 +37,7 @@ public class StudRegDAO {
             while (rs.next()) {
                 int studentId = rs.getInt("Id");
                     double studentAbsence = getStudentAttendanceDaysInSemesterCourse(courseId,studentId);
-                students.add(new Student(studentId, rs.getString("FirstName"), rs.getString("LastName"), studentAbsence/allLessonsInCourse));
+                students.add(new Student(studentId, rs.getString("FirstName"), rs.getString("LastName"), (studentAbsence/allLessonsInCourse*100)));
 
             }
         } catch (SQLException throwables) {
@@ -208,6 +210,7 @@ public class StudRegDAO {
     public Integer getCourseDaysInSemesterCourse(int id) {
         HashMap<String, Date> startAndEndDate = getCourseStartAndEndDate(id);
         ArrayList<Integer> courseWeekDays = getCourseLessonDays(id);
+        courseWeekDays.forEach(integer -> System.out.println(integer));
         int totalLessons = 0;
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
