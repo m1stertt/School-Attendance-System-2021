@@ -3,14 +3,19 @@ package bll;
 import be.Course;
 import be.Student;
 import dal.StudRegDAO;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 
 public class StudRegManager {
@@ -24,7 +29,7 @@ public class StudRegManager {
     public List<Student> getAllStudentsCalculatedAbsence(int id) {
         int courseDaysInSemester = studRegDAO.getCourseDaysInSemesterCourseUntilNow(id);
         List<Student> allStudents = studRegDAO.getAllStudents(id);
-        allStudents.forEach(student -> student.setAbsence(student.getAbsence()/courseDaysInSemester*100));
+        allStudents.forEach(student -> student.setAbsence(student.getAbsence() / courseDaysInSemester * 100));
         return allStudents;
     }
 
@@ -46,7 +51,7 @@ public class StudRegManager {
         return studRegDAO.getCourseTime(day);
     }
 
-    public HashMap<String, Double> getCourseAbsenceDate(int courseId){
+    public HashMap<String, Double> getCourseAbsenceDate(int courseId) {
         HashMap<String, Double> courseAbsenceData = new HashMap<>();
         List<Student> allStudents = studRegDAO.getAllStudents(courseId);
         int studentCounter = 0;
@@ -62,17 +67,61 @@ public class StudRegManager {
         return courseAbsenceData;
     }
 
-    public int getCourseDaysInSemesterCourseUntilNow(int id) {
-        return studRegDAO.getCourseDaysInSemesterCourseUntilNow(id);
-    }
-    //Returns a double representing the percentage of how present the student is. 0.24=24% attendance etc.
-    public double getAbsenceData(int studentID){
-        List<Course> courses=studRegDAO.getAllStudentCourses(studentID);
-        double sum=0;
-        for(Course course:courses){
-            sum+=(double)studRegDAO.getStudentAttendanceDaysInSemesterCourse(course.getId(),studentID)/studRegDAO.getCourseDaysInSemesterCourseUntilNow(course.getId());
+    public HashMap<String, Integer> getWeekdayAttendanceData(int studentId) {
+        HashMap<String, Integer> attendanceDays = new HashMap<>();
+        for (int i = 1; i <= 5; i++) {
+            attendanceDays.put(DayOfWeek.of(i).toString(), 0);
         }
-        double d=sum/courses.size();
+        studRegDAO.getALlStudentAttendanceDates(studentId).forEach(timestamp -> {
+            LocalDateTime attendanceDay = timestamp.toLocalDateTime();
+            switch (attendanceDay.getDayOfWeek()) {
+                case MONDAY -> { Integer count = attendanceDays.get("MONDAY");
+                    attendanceDays.put("MONDAY", count + 1);
+                }
+                case TUESDAY -> { Integer count = attendanceDays.get("TUESDAY");
+                    attendanceDays.put("TUESDAY", count + 1);
+                }
+                case WEDNESDAY -> { Integer count = attendanceDays.get("WEDNESDAY");
+                    attendanceDays.put("WEDNESDAY", count + 1);
+                }
+                case THURSDAY -> { Integer count = attendanceDays.get("THURSDAY");
+                    attendanceDays.put("THURSDAY", count + 1);
+                }
+                case FRIDAY -> { Integer count = attendanceDays.get("FRIDAY");
+                    attendanceDays.put("FRIDAY", count + 1);
+                }
+            }
+        });
+        return attendanceDays;
+    }
+
+    public XYChart.Series createWeekDaySeries(int studentId) {
+        HashMap<String, Integer> attendanceDays = getWeekdayAttendanceData(studentId);
+        int lessonDaysUntilNow = 0;
+        List<Course> allCourses = studRegDAO.getAllCourses();
+        for(Course c : allCourses){
+            lessonDaysUntilNow += studRegDAO.getCourseDaysInSemesterCourseUntilNow(c.getId());
+        }
+        lessonDaysUntilNow = lessonDaysUntilNow/5;
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Student Attendance");
+        series.getData().add(new XYChart.Data<>("Monday", lessonDaysUntilNow-attendanceDays.get("MONDAY")));
+        series.getData().add(new XYChart.Data<>("Tuesday", lessonDaysUntilNow-attendanceDays.get("TUESDAY")));
+        series.getData().add(new XYChart.Data<>("Wednesday", lessonDaysUntilNow-attendanceDays.get("WEDNESDAY")));
+        series.getData().add(new XYChart.Data<>("Thursday", lessonDaysUntilNow-attendanceDays.get("THURSDAY")));
+        series.getData().add(new XYChart.Data<>("Friday", lessonDaysUntilNow-attendanceDays.get("FRIDAY")));
+        return series;
+    }
+
+
+    //Returns a double representing the percentage of how present the student is. 0.24=24% attendance etc.
+    public double getAbsenceData(int studentID) {
+        List<Course> courses = studRegDAO.getAllStudentCourses(studentID);
+        double sum = 0;
+        for (Course course : courses) {
+            sum += (double) studRegDAO.getStudentAttendanceDaysInSemesterCourse(course.getId(), studentID) / studRegDAO.getCourseDaysInSemesterCourseUntilNow(course.getId());
+        }
+        double d = sum / courses.size();
         return d;
     }
 

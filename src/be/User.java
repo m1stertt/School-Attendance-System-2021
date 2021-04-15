@@ -29,4 +29,8 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName.set(lastName);
     }
+
+    public int getId() {
+        return id;
+    }
 }

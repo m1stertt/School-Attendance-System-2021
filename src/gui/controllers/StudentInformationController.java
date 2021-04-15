@@ -1,13 +1,17 @@
 package gui.controllers;
 
 import be.Student;
+import bll.LoginSession;
 import bll.StudRegManager;
 import com.jfoenix.controls.JFXButton;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -30,6 +34,8 @@ public class StudentInformationController implements Initializable {
     private JFXButton closesWindow;
     @FXML
     private Label studentNameDisplay;
+    @FXML
+    private PieChart attendancePieChart;
 
     private Student selectedStudent;
 
@@ -38,7 +44,6 @@ public class StudentInformationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        drawStudentAttendenceChart();
 
     }
 
@@ -55,6 +60,8 @@ public class StudentInformationController implements Initializable {
     public void attendanceEdit(Student student) {
         this.selectedStudent = student;
         studentNameDisplay.setText(selectedStudent.getFirstName() + " " + selectedStudent.getLastName());
+        drawPieChartData();
+        drawStudentAttendenceChart();
     }
 
     public void drawStudentAttendenceChart() {
@@ -62,10 +69,16 @@ public class StudentInformationController implements Initializable {
         xAxis.setTickLabelRotation(10);
         Axis<String> yAxis = absenceDisplay.getYAxis();
         yAxis.setLabel("Absence shown as lessons");
+        absenceDisplay.getData().add(studRegManager.createWeekDaySeries(selectedStudent.getId()));
+    }
 
-        absenceDisplay.getData().add(studRegManager.getSummarizedStudentWeekDayData());
-
-        //todo add information from database on students abscene
+    public void drawPieChartData() {
+        double d=studRegManager.getAbsenceData(selectedStudent.getId());
+        ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Present", d),
+                new PieChart.Data("Absent", 1-d)
+        );
+        attendancePieChart.setData(attendancePieChartData);
     }
 
 

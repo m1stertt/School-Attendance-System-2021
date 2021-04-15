@@ -20,6 +20,7 @@ public class StudRegDAO {
 
     /**
      * This method is used to get all students related to a course.
+     *
      * @param courseId id of the course.
      * @return a list of all students
      */
@@ -32,7 +33,7 @@ public class StudRegDAO {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 int studentId = rs.getInt("Id");
-                    double studentAbsence = getStudentAttendanceDaysInSemesterCourse(courseId,studentId);
+                double studentAbsence = getStudentAttendanceDaysInSemesterCourse(courseId, studentId);
                 students.add(new Student(studentId, rs.getString("FirstName"), rs.getString("LastName"), studentAbsence));
 
             }
@@ -44,6 +45,7 @@ public class StudRegDAO {
 
     /**
      * Method to get all courses.
+     *
      * @return a list of all courses registered in database.
      */
     public List<Course> getAllCourses() {
@@ -67,8 +69,10 @@ public class StudRegDAO {
         }
         return courses;
     }
+
     /**
      * Method to get all courses related to a student.
+     *
      * @return a list of all courses related to a student in the database.
      */
     public List<Course> getAllStudentCourses(int studentID) {
@@ -78,7 +82,7 @@ public class StudRegDAO {
             String sql = "SELECT C.Id, C.[Name], C.StartDate, C.EndDate " +
                     "FROM Courses AS C JOIN StudentCourses as SC ON C.Id = SC.CourseID AND SC.StudentID = ?;";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1,studentID);
+            pstmt.setInt(1, studentID);
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -114,6 +118,26 @@ public class StudRegDAO {
         }
     }
 
+    public List<Timestamp> getALlStudentAttendanceDates(int studentId) {
+        dataSource = new DBConnector();
+        List<Timestamp> allAttendanceDays = new ArrayList();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT SLA.RegisterTime " +
+                    "FROM StudentLessonAttendance AS SLA " +
+                    "WHERE SLA.StudentId = ?;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, studentId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Timestamp attendanceDay = rs.getTimestamp("RegisterTime");
+                allAttendanceDays.add(attendanceDay);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return allAttendanceDays;
+    }
+
 
     public Integer getStudentAttendanceDaysInSemesterCourse(int courseId, int studentId) {
         dataSource = new DBConnector();
@@ -124,7 +148,7 @@ public class StudRegDAO {
                     "AND SLA.StudentId = ?;";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, courseId);
-            pstmt.setInt(2,studentId);
+            pstmt.setInt(2, studentId);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt("TotalCourseAttendanceDays");
@@ -138,6 +162,7 @@ public class StudRegDAO {
     /**
      * This method returns a list of course names to populate the student registration
      * window with a list of all courses to attend to on a day.
+     *
      * @param day a day in the format 1-7.
      * @return a list of all course names on a day.
      */
@@ -184,7 +209,6 @@ public class StudRegDAO {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, day);
             ResultSet rs = pstmt.executeQuery();
-            DateFormat df = new SimpleDateFormat("H:mm");
             while (rs.next()) {
                 LocalTime startTime = rs.getObject("StartTime", LocalTime.class);
                 LocalTime endTime = rs.getObject("EndTime", LocalTime.class);

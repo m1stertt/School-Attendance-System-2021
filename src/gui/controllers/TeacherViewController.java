@@ -159,7 +159,7 @@ public class TeacherViewController implements Initializable {
             task.getException().printStackTrace();
         });
         task.setOnSucceeded(e -> {
-            allStudents.addAll(FXCollections.observableArrayList(task.getValue()));
+            allStudents.setAll(FXCollections.observableArrayList(task.getValue()));
             studentsTableView.setItems(allStudents);
             summarizedAttendance.setSortType(TableColumn.SortType.ASCENDING);
             studentsTableView.getSortOrder().add(summarizedAttendance);
@@ -175,8 +175,6 @@ public class TeacherViewController implements Initializable {
         Parent root = loader.load();
         StudentInformationController controller = loader.getController();
         controller.attendanceEdit(selectedStudent);
-
-
         handleStageGeneral(root);
 
     }
