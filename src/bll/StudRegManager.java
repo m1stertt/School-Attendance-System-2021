@@ -1,5 +1,6 @@
 package bll;
 
+import be.Attendance;
 import be.Course;
 import be.Student;
 import dal.StudRegDAO;
@@ -33,6 +34,9 @@ public class StudRegManager {
     public List<Course> getAllCourses() {
         return studRegDAO.getAllCourses();
     }
+    public List<Course> getAllCoursesForStudent(Student student) {
+        return studRegDAO.getAllCourses(student.getId());
+    }
 
     public List<String> getCoursesStringForDay(LocalDate localDate) {
         Integer day = localDate.getDayOfWeek().getValue();
@@ -59,6 +63,10 @@ public class StudRegManager {
         return d;
     }
 
+    public List<Attendance> getAttendanceList(int studentID){
+        return studRegDAO.getStudentAttendanceDays(studentID);
+    }
+
     public int getCourseDaysInPeriod(int id) {
         return studRegDAO.getCourseDaysInSemesterCourse(id);
     }
@@ -69,5 +77,9 @@ public class StudRegManager {
 
     public void attendanceRegister(Course course) {
         studRegDAO.registerAttendance(course.getCourseName());
+    }
+
+    public String getCourseName(int courseID){
+        return studRegDAO.getCourseName(courseID);
     }
 }

@@ -14,6 +14,8 @@ public class User {
         this.lastName = new SimpleStringProperty(lastName);
     }
 
+    public int getId(){ return id; }
+
     public String getFirstName() {
         return firstName.get();
     }

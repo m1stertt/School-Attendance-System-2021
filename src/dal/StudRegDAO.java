@@ -1,5 +1,6 @@
 package dal;
 
+import be.Attendance;
 import be.Course;
 import be.Student;
 import bll.LoginSession;
@@ -128,6 +129,24 @@ public class StudRegDAO {
         return null;
     }
 
+    public String getCourseName(int courseID) {
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT C.Name " +
+                    "FROM Courses AS C " +
+                    "WHERE C.Id = ?;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, courseID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("Name");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
     public Integer getStudentAttendanceDaysInSemesterCourse(int courseId, int studentId) {
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
@@ -146,6 +165,27 @@ public class StudRegDAO {
             throwables.printStackTrace();
         }
         return null;
+    }
+
+    public List<Attendance> getStudentAttendanceDays(int studentId) {
+        ObservableList<Attendance> attendance = FXCollections.observableArrayList();
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT * FROM StudentLessonAttendance AS SLA WHERE SLA.StudentId = ? ORDER BY SLA.RegisterTime DESC;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1,studentId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Integer studentID = rs.getInt("StudentID");
+                Integer courseID = rs.getInt("CourseID");
+                Date registerTime = rs.getDate("RegisterTime");
+                Integer status = rs.getInt("Status");
+                attendance.add(new Attendance(studentID,courseID,registerTime,status));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return attendance;
     }
 
     public List<String> getCoursesStringForDay(Integer day) {
