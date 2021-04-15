@@ -41,6 +41,8 @@ public class StudentInformationController implements Initializable {
     @FXML
     private Label studentNameDisplay;
 
+    private Student selectedStudent;
+
     private StudRegManager studRegManager = new StudRegManager();
 
 
@@ -81,18 +83,7 @@ public class StudentInformationController implements Initializable {
         attendanceList.setMinSize(184, 50 * courses.size()); //This makes sure scroll appears if necessary, calculating the proper height for the pane, so the scrollPane will react.
     }
 
-
-    public void studentName(Student student){
-        String firstName = student.getFirstName();
-        String lastName = student.getLastName();
-
-        studentNameDisplay.setText(firstName+" "+lastName);
-    }
-
     public void savesAndCloses(ActionEvent actionEvent) {
-
-        //todo add code to save and close the window
-
         Stage window = (Stage) closesWindow.getScene().getWindow();
         window.close();
 
@@ -103,11 +94,11 @@ public class StudentInformationController implements Initializable {
 
     public void attendanceEdit(Student student){
         createAttendanceView(student);
-        //todo add stuff that allows editing of attendance
-
+        this.selectedStudent = student;
+        studentNameDisplay.setText(selectedStudent.getFirstName() + " " + selectedStudent.getLastName());
     }
 
-    public void drawStudentAttendenceChart(){
+    public void drawStudentAttendenceChart() {
         Axis<String> xAxis = absenceDisplay.getXAxis();
         xAxis.setTickLabelRotation(10);
         Axis<String> yAxis = absenceDisplay.getYAxis();

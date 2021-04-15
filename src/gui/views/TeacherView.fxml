@@ -6,26 +6,22 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.effect.BoxBlur?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="background" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.TeacherViewController">
+<AnchorPane id="background" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.TeacherViewController">
    <children>
-      <JFXComboBox fx:id="courseComboCheckBox" focusColor="#fbbb2c" layoutX="96.0" layoutY="98.0" minWidth="-Infinity" onAction="#onComboboxSelect" prefHeight="25.0" prefWidth="121.0" unFocusColor="#2f4b8f">
-         <effect>
-            <BoxBlur iterations="0" />
-         </effect></JFXComboBox>
+      <JFXComboBox fx:id="courseComboCheckBox" focusColor="#fbbb2c" layoutX="96.0" layoutY="98.0" minWidth="-Infinity" onAction="#onComboboxSelect" prefHeight="25.0" prefWidth="121.0" unFocusColor="#2f4b8f" visibleRowCount="6" />
       <ImageView fx:id="EASV" fitHeight="80.0" fitWidth="300.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="5.0" />
       <Button fx:id="closeTeacher" layoutX="534.0" layoutY="14.0" mnemonicParsing="false" onAction="#logoutTeacher" text="Log Out" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
       <Label fx:id="displayTeacherName" layoutX="453.0" layoutY="27.0" text="Teacher" />
-      <PieChart fx:id="attendancePieChart" layoutX="438.0" layoutY="135.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="208.0" prefWidth="288.0" title="Overall Class Attendance:" />
+      <PieChart fx:id="attendancePieChart" layoutX="437.0" layoutY="147.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="208.0" prefWidth="288.0" />
       <Label layoutX="52.0" layoutY="110.0" text="Class:" />
-      <TableView fx:id="studentsTableView" layoutX="33.0" layoutY="147.0" onMouseClicked="#onStudentSelected" prefHeight="423.0" prefWidth="300.0">
+      <TableView fx:id="studentsTableView" editable="true" layoutX="33.0" layoutY="147.0" prefHeight="423.0" prefWidth="300.0">
         <columns>
-          <TableColumn fx:id="studentFirstName" prefWidth="98.0" text="Firstname" />
-            <TableColumn fx:id="studentLastName" prefWidth="78.0" text="Lastname" />
-          <TableColumn fx:id="summarizedAttendance" prefWidth="78.0" text="Summ Att." />
+          <TableColumn fx:id="studentFirstName" editable="false" prefWidth="98.0" sortable="false" text="Firstname" />
+            <TableColumn fx:id="studentLastName" editable="false" prefWidth="78.0" sortable="false" text="Lastname" />
+          <TableColumn fx:id="summarizedAttendance" prefWidth="78.0" sortType="DESCENDING" text="Presence" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -33,5 +29,6 @@
       </TableView>
       <Label fx:id="currentTimeOfLogin" layoutX="533.0" layoutY="72.0" text="Label" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="55.0" />
       <Button fx:id="moreStudentInfo" layoutX="244.0" layoutY="106.0" mnemonicParsing="false" onAction="#getsStudentInfo" text="Student Info" />
+      <Label layoutX="462.0" layoutY="147.0" text="Overall Student Course Attendance (All Students):" />
    </children>
 </AnchorPane>
