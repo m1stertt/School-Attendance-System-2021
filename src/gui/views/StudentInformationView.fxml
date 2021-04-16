@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="background" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.StudentInformationController">
+<AnchorPane id="background" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.StudentInformationController">
    <children>
       <Label fx:id="studentNameDisplay" layoutX="22.0" layoutY="33.0" prefHeight="16.0" prefWidth="239.0" text="student name goes here" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
          <font>
@@ -42,7 +42,7 @@
          </children>
       </VBox>
       <PieChart fx:id="attendancePieChart" layoutX="316.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="215.0" title="Overall Attendance:" />
-      <AnchorPane fx:id="attendanceList" layoutX="28.0" layoutY="216.0" prefHeight="330.0" prefWidth="184.0" />
+      <AnchorPane fx:id="attendanceList" layoutX="28.0" layoutY="144.0" prefHeight="402.0" prefWidth="184.0" />
       <Line endX="23.0" endY="47.0" layoutX="220.0" layoutY="167.0" startX="23.0" startY="379.0" />
    </children>
 </AnchorPane>

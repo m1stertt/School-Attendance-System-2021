@@ -3,7 +3,6 @@ package gui.controllers;
 import be.Attendance;
 import be.Student;
 import com.jfoenix.controls.JFXButton;
-import gui.models.StudentInformationModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
