@@ -32,12 +32,6 @@ public class StudentInformationController implements Initializable {
     @FXML
     private AnchorPane attendanceList;
     @FXML
-    private RadioButton presentSelect;
-    @FXML
-    private RadioButton absentSelect;
-    @FXML
-    private ToggleGroup attendance;
-    @FXML
     private LineChart absenceDisplay;
     @FXML
     private JFXButton closesWindow;
@@ -92,9 +86,6 @@ public class StudentInformationController implements Initializable {
         Stage window = (Stage) closesWindow.getScene().getWindow();
         window.close();
 
-    }
-
-    public void setsAttendance(ActionEvent actionEvent) {
     }
 
     public void attendanceEdit(Student student) {
