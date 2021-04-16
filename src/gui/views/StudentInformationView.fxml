@@ -11,7 +11,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane id="background" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.StudentInformationController">
    <children>
@@ -67,8 +69,15 @@
                   </VBox>
                </children>
             </HBox>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Attendance List">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
          </children>
       </VBox>
       <PieChart fx:id="attendancePieChart" layoutX="28.0" layoutY="397.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="215.0" title="Overall Attendance:" />
+      <AnchorPane fx:id="attendanceList" layoutX="28.0" layoutY="216.0" prefHeight="330.0" prefWidth="184.0" />
+      <Line endX="23.0" endY="47.0" layoutX="220.0" layoutY="167.0" startX="23.0" startY="379.0" />
    </children>
 </AnchorPane>

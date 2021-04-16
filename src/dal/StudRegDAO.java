@@ -1,5 +1,6 @@
 package dal;
 
+import be.Attendance;
 import be.Course;
 import be.Student;
 import bll.LoginSession;
@@ -20,7 +21,6 @@ public class StudRegDAO {
 
     /**
      * This method is used to get all students related to a course.
-     *
      * @param courseId id of the course.
      * @return a list of all students
      */
@@ -45,7 +45,6 @@ public class StudRegDAO {
 
     /**
      * Method to get all courses.
-     *
      * @return a list of all courses registered in database.
      */
     public List<Course> getAllCourses() {
@@ -69,10 +68,8 @@ public class StudRegDAO {
         }
         return courses;
     }
-
     /**
      * Method to get all courses related to a student.
-     *
      * @return a list of all courses related to a student in the database.
      */
     public List<Course> getAllStudentCourses(int studentID) {
@@ -162,7 +159,6 @@ public class StudRegDAO {
     /**
      * This method returns a list of course names to populate the student registration
      * window with a list of all courses to attend to on a day.
-     *
      * @param day a day in the format 1-7.
      * @return a list of all course names on a day.
      */
@@ -209,6 +205,7 @@ public class StudRegDAO {
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, day);
             ResultSet rs = pstmt.executeQuery();
+            DateFormat df = new SimpleDateFormat("H:mm");
             while (rs.next()) {
                 LocalTime startTime = rs.getObject("StartTime", LocalTime.class);
                 LocalTime endTime = rs.getObject("EndTime", LocalTime.class);
