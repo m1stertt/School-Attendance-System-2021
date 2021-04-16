@@ -1,7 +1,7 @@
 package gui.controllers;
 
 import com.jfoenix.controls.JFXComboBox;
-import gui.models.StudRegModel;
+import gui.models.LoginViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -35,7 +35,7 @@ public class LoginViewController implements Initializable {
 
     private ScreenController screenController;
 
-    private StudRegModel studRegModel = new StudRegModel();
+    private LoginViewModel loginViewModel = new LoginViewModel();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -51,11 +51,11 @@ public class LoginViewController implements Initializable {
             String userName = usernameField.getText();
             String password = passwordField.getText();
             String role = roleComboBox.getSelectionModel().getSelectedItem();
-            if(studRegModel.checkLogin(userName, password, role) && role.equalsIgnoreCase("student")){
+            if(loginViewModel.checkLogin(userName, password, role) && role.equalsIgnoreCase("student")){
                 screenController.setStudentView();
 
             }
-            else if ((studRegModel.checkLogin(userName, password, role) && role.equalsIgnoreCase("teacher"))){
+            else if ((loginViewModel.checkLogin(userName, password, role) && role.equalsIgnoreCase("teacher"))){
                 screenController.setTeacherView();
             }
             else throw new Exception();

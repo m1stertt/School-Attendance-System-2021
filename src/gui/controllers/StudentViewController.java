@@ -1,9 +1,8 @@
 package gui.controllers;
 
-import be.Student;
 import bll.LoginSession;
-import bll.StudRegManager;
 import gui.models.CurrentTimeClock;
+import gui.models.StudentViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -44,11 +43,11 @@ public class StudentViewController implements Initializable {
     private Label displayStudentName;
 
     private ScreenController screenController;
-    private StudRegManager studRegManager;
+    private StudentViewModel studentViewModel = new StudentViewModel();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        studRegManager = new StudRegManager();
+
         addImage();
         screenController = ScreenController.getInstance();
         displayClock();
@@ -58,14 +57,14 @@ public class StudentViewController implements Initializable {
         //todo display student name and not login  name
 
 
-        createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue()));
+        createCoursesView(studentViewModel.getCoursesStringForDay(datePicker.getValue()));
     }
 
 
     public void handleDatePicker() {
         datePicker.setValue(LocalDate.now()); //Set initial value
         datePicker.valueProperty().addListener((ov, oldValue, newValue) -> { //Listen for changes in the datePicker
-            createCoursesView(studRegManager.getCoursesStringForDay(datePicker.getValue())); //Update list of courses to reflect new date.
+            createCoursesView(studentViewModel.getCoursesStringForDay(datePicker.getValue())); //Update list of courses to reflect new date.
         });
     }
 
@@ -99,13 +98,13 @@ public class StudentViewController implements Initializable {
 
     public void setButtonEvents(Button button1, Label label1) {
         button1.setOnAction(e -> {
-            HashMap<String, ArrayList<LocalTime>> courseTimes = studRegManager.getCourseTime(datePicker.getValue());
+            HashMap<String, ArrayList<LocalTime>> courseTimes = studentViewModel.getCourseTime(datePicker.getValue());
             courseTimes.forEach((s, dates) -> {
                 if ((label1.getText().contains(s)) && isWithinRange(dates.get(0), dates.get(1))) {
                     button1.setDisable(true);
-                    studRegManager.getAllCourses().forEach(course -> {
+                    studentViewModel.getAllCourses().forEach(course -> {
                         if (label1.getText().contains(course.getCourseName())) {
-                            studRegManager.attendanceRegister(course);
+                            studentViewModel.attendanceRegister(course);
                         }
                     });
                 }
@@ -126,7 +125,7 @@ public class StudentViewController implements Initializable {
     }
 
     public void drawPieChartData() {
-        double d=studRegManager.getAbsenceData(LoginSession.getUserId());
+        double d= studentViewModel.getAbsenceData(LoginSession.getUserId());
         ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("Present", d),
                 new PieChart.Data("Absent", 1-d)

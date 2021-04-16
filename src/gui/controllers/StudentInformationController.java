@@ -1,11 +1,9 @@
 package gui.controllers;
 
 import be.Attendance;
-import be.Course;
 import be.Student;
-import bll.LoginSession;
-import bll.StudRegManager;
 import com.jfoenix.controls.JFXButton;
+import gui.models.StudentInformationModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,8 +15,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
@@ -32,12 +28,6 @@ public class StudentInformationController implements Initializable {
     @FXML
     private AnchorPane attendanceList;
     @FXML
-    private RadioButton presentSelect;
-    @FXML
-    private RadioButton absentSelect;
-    @FXML
-    private ToggleGroup attendance;
-    @FXML
     private LineChart absenceDisplay;
     @FXML
     private JFXButton closesWindow;
@@ -47,8 +37,7 @@ public class StudentInformationController implements Initializable {
     private PieChart attendancePieChart;
 
     private Student selectedStudent;
-
-    private StudRegManager studRegManager = new StudRegManager();
+    private StudentInformationModel studentInformationModel = new StudentInformationModel();
 
 
     @Override
@@ -60,7 +49,7 @@ public class StudentInformationController implements Initializable {
     public void createAttendanceView(Student student) {
         //LoginSession.getUserName();
         //Get courses
-        List<Attendance> courses=studRegManager.getAttendanceList(student.getId());
+        List<Attendance> courses= studentInformationModel.getAttendanceList(student.getId());
         //Create view
         attendanceList.getChildren().clear();
         for (int i = 0; i < courses.size(); i++) {
@@ -94,8 +83,6 @@ public class StudentInformationController implements Initializable {
 
     }
 
-    public void setsAttendance(ActionEvent actionEvent) {
-    }
 
     public void attendanceEdit(Student student) {
         this.selectedStudent = student;
@@ -110,11 +97,11 @@ public class StudentInformationController implements Initializable {
         xAxis.setTickLabelRotation(10);
         Axis<String> yAxis = absenceDisplay.getYAxis();
         yAxis.setLabel("Absence shown as lessons");
-        absenceDisplay.getData().add(studRegManager.createWeekDaySeries(selectedStudent.getId()));
+        absenceDisplay.getData().add(studentInformationModel.createWeekDaySeries(selectedStudent.getId()));
     }
 
     public void drawPieChartData() {
-        double d=studRegManager.getAbsenceData(selectedStudent.getId());
+        double d= studentInformationModel.getAbsenceData(selectedStudent.getId());
         ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("Present", d),
                 new PieChart.Data("Absent", 1-d)

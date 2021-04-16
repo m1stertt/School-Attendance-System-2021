@@ -2,7 +2,7 @@ package gui.models;
 
 import bll.StudRegManager;
 
-public class StudRegModel {
+public class LoginViewModel {
 
     private StudRegManager studRegManager = new StudRegManager();
 

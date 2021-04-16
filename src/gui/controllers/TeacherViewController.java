@@ -3,9 +3,9 @@ package gui.controllers;
 import be.Course;
 import be.Student;
 import bll.LoginSession;
-import bll.StudRegManager;
 import com.jfoenix.controls.JFXComboBox;
 import gui.models.CurrentTimeClock;
+import gui.models.TeacherViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -15,7 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -34,13 +33,7 @@ import java.util.concurrent.Executors;
 public class TeacherViewController implements Initializable {
 
     @FXML
-    private Label displayTeacherName;
-    @FXML
-    private Button moreStudentInfo;
-    @FXML
     private PieChart attendancePieChart;
-    @FXML
-    private AreaChart studentAttendanceChart;
     @FXML
     private TableView<Student> studentsTableView;
     @FXML
@@ -57,15 +50,14 @@ public class TeacherViewController implements Initializable {
     private ImageView EASV;
 
     private ScreenController screenController;
-    private StudRegManager studRegManager;
+    private TeacherViewModel teacherViewModel = new TeacherViewModel();
     private ExecutorService executorService = Executors.newFixedThreadPool(2);
-    private ObservableList<Student> allStudents = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addImage();
         screenController = ScreenController.getInstance();
-        studRegManager = new StudRegManager();
+
         initializeStudentViewDisplay();
         initializeCourses();
         initializeStudents();
@@ -78,7 +70,7 @@ public class TeacherViewController implements Initializable {
         Task<ObservableList<PieChart.Data>> task = new Task<>() {
             @Override
             public ObservableList<PieChart.Data> call() throws Exception {
-                HashMap<String, Double> courseAbsenceData = studRegManager.getCourseAbsenceDate(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+                HashMap<String, Double> courseAbsenceData = teacherViewModel.getCourseAbsenceDate(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
                 ObservableList<PieChart.Data> attendancePieChartData = FXCollections.observableArrayList(
                         new PieChart.Data("Presence", courseAbsenceData.get("classAverageStudentAttendance")),
                         new PieChart.Data("Absence", courseAbsenceData.get("allLessonsInCourse")-courseAbsenceData.get("classAverageStudentAttendance"))
@@ -105,7 +97,7 @@ public class TeacherViewController implements Initializable {
     }
 
     public void initializeCourses() {
-        courseComboCheckBox.getItems().addAll(studRegManager.getAllCourses());
+        courseComboCheckBox.getItems().addAll(teacherViewModel.getAllCourses());
     }
 
     public void initializeStudentViewDisplay() {
@@ -149,18 +141,17 @@ public class TeacherViewController implements Initializable {
     }
 
     public void runGetStudentsThread() {
-        Task<List<Student>> task = new Task<>() {
+        Task<ObservableList<Student>> task = new Task<>() {
             @Override
-            public List<Student> call() throws Exception {
-                return studRegManager.getAllStudentsCalculatedAbsence(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
+            public ObservableList<Student> call() throws Exception {
+                return teacherViewModel.getAllStudents(courseComboCheckBox.getSelectionModel().getSelectedItem().getId());
             }
         };
         task.setOnFailed(e -> {
             task.getException().printStackTrace();
         });
         task.setOnSucceeded(e -> {
-            allStudents.setAll(FXCollections.observableArrayList(task.getValue()));
-            studentsTableView.setItems(allStudents);
+            studentsTableView.setItems(task.getValue());
             summarizedAttendance.setSortType(TableColumn.SortType.ASCENDING);
             studentsTableView.getSortOrder().add(summarizedAttendance);
             studentsTableView.sort();
@@ -176,7 +167,6 @@ public class TeacherViewController implements Initializable {
         StudentInformationController controller = loader.getController();
         controller.attendanceEdit(selectedStudent);
         handleStageGeneral(root);
-
     }
 
     private void handleStageGeneral(Parent root) {
@@ -186,7 +176,6 @@ public class TeacherViewController implements Initializable {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.showAndWait();
-
     }
 
 

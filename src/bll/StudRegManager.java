@@ -19,7 +19,6 @@ public class StudRegManager {
 
     private StudRegDAO studRegDAO = new StudRegDAO();
 
-
     public List<Student> getAllStudentsCalculatedAbsence(int id) {
         int courseDaysInSemester = studRegDAO.getCourseDaysInSemesterCourseUntilNow(id);
         List<Student> allStudents = studRegDAO.getAllStudents(id);
@@ -65,19 +64,24 @@ public class StudRegManager {
         studRegDAO.getALlStudentAttendanceDates(studentId).forEach(timestamp -> {
             LocalDateTime attendanceDay = timestamp.toLocalDateTime();
             switch (attendanceDay.getDayOfWeek()) {
-                case MONDAY -> { Integer count = attendanceDays.get("MONDAY");
+                case MONDAY -> {
+                    Integer count = attendanceDays.get("MONDAY");
                     attendanceDays.put("MONDAY", count + 1);
                 }
-                case TUESDAY -> { Integer count = attendanceDays.get("TUESDAY");
+                case TUESDAY -> {
+                    Integer count = attendanceDays.get("TUESDAY");
                     attendanceDays.put("TUESDAY", count + 1);
                 }
-                case WEDNESDAY -> { Integer count = attendanceDays.get("WEDNESDAY");
+                case WEDNESDAY -> {
+                    Integer count = attendanceDays.get("WEDNESDAY");
                     attendanceDays.put("WEDNESDAY", count + 1);
                 }
-                case THURSDAY -> { Integer count = attendanceDays.get("THURSDAY");
+                case THURSDAY -> {
+                    Integer count = attendanceDays.get("THURSDAY");
                     attendanceDays.put("THURSDAY", count + 1);
                 }
-                case FRIDAY -> { Integer count = attendanceDays.get("FRIDAY");
+                case FRIDAY -> {
+                    Integer count = attendanceDays.get("FRIDAY");
                     attendanceDays.put("FRIDAY", count + 1);
                 }
             }
@@ -89,22 +93,22 @@ public class StudRegManager {
         HashMap<String, Integer> attendanceDays = getWeekdayAttendanceData(studentId);
         int lessonDaysUntilNow = 0;
         List<Course> allCourses = studRegDAO.getAllCourses();
-        for(Course c : allCourses){
+        for (Course c : allCourses) {
             lessonDaysUntilNow += studRegDAO.getCourseDaysInSemesterCourseUntilNow(c.getId());
         }
-        lessonDaysUntilNow = lessonDaysUntilNow/5;
+        lessonDaysUntilNow = lessonDaysUntilNow / 5;
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Student Attendance");
-        series.getData().add(new XYChart.Data<>("Monday", lessonDaysUntilNow-attendanceDays.get("MONDAY")));
-        series.getData().add(new XYChart.Data<>("Tuesday", lessonDaysUntilNow-attendanceDays.get("TUESDAY")));
-        series.getData().add(new XYChart.Data<>("Wednesday", lessonDaysUntilNow-attendanceDays.get("WEDNESDAY")));
-        series.getData().add(new XYChart.Data<>("Thursday", lessonDaysUntilNow-attendanceDays.get("THURSDAY")));
-        series.getData().add(new XYChart.Data<>("Friday", lessonDaysUntilNow-attendanceDays.get("FRIDAY")));
+        series.getData().add(new XYChart.Data<>("Monday", lessonDaysUntilNow - attendanceDays.get("MONDAY")));
+        series.getData().add(new XYChart.Data<>("Tuesday", lessonDaysUntilNow - attendanceDays.get("TUESDAY")));
+        series.getData().add(new XYChart.Data<>("Wednesday", lessonDaysUntilNow - attendanceDays.get("WEDNESDAY")));
+        series.getData().add(new XYChart.Data<>("Thursday", lessonDaysUntilNow - attendanceDays.get("THURSDAY")));
+        series.getData().add(new XYChart.Data<>("Friday", lessonDaysUntilNow - attendanceDays.get("FRIDAY")));
         return series;
     }
 
-
     //Returns a double representing the percentage of how present the student is. 0.24=24% attendance etc.
+
     public double getAbsenceData(int studentID) {
         List<Course> courses = studRegDAO.getAllStudentCourses(studentID);
         double sum = 0;
@@ -115,7 +119,7 @@ public class StudRegManager {
         return d;
     }
 
-    public List<Attendance> getAttendanceList(int studentID){
+    public List<Attendance> getAttendanceList(int studentID) {
         return studRegDAO.getStudentAttendanceDays(studentID);
     }
 
@@ -127,7 +131,7 @@ public class StudRegManager {
         studRegDAO.registerAttendance(course.getId());
     }
 
-    public String getCourseName(int courseID){
+    public String getCourseName(int courseID) {
         return studRegDAO.getCourseName(courseID);
     }
 }
