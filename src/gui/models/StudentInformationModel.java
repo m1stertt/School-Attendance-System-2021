@@ -1,9 +1,11 @@
 package gui.models;
 
 import be.Attendance;
+import be.Student;
 import bll.StudRegManager;
 import javafx.scene.chart.XYChart;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class StudentInformationModel {
@@ -18,6 +20,9 @@ public class StudentInformationModel {
         return studRegManager.getAbsenceData(studentID);
     }
 
+    public List<String> getCoursesStringForDay(Student student, LocalDate localDate) {
+        return studRegManager.getCoursesStringForDay(student,localDate);
+    }
 
     public List<Attendance> getAttendanceList(int studentID) {
         return studRegManager.getAttendanceList(studentID);

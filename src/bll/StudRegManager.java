@@ -34,6 +34,10 @@ public class StudRegManager {
         Integer day = localDate.getDayOfWeek().getValue();
         return studRegDAO.getCoursesStringForDay(day);
     }
+    public List<String> getCoursesStringForDay(Student student,LocalDate localDate) {
+        Integer day = localDate.getDayOfWeek().getValue();
+        return studRegDAO.getCoursesStringForDay(student,day);
+    }
 
     public HashMap<String, ArrayList<LocalTime>> getCourseTime(LocalDate localDate) {
         Integer day = localDate.getDayOfWeek().getValue();

@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="background" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.StudentInformationController">
+<AnchorPane id="background" prefHeight="600.0" prefWidth="860.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.StudentInformationController">
    <children>
       <Label fx:id="studentNameDisplay" layoutX="22.0" layoutY="33.0" prefHeight="16.0" prefWidth="239.0" text="student name goes here" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
          <font>
@@ -32,7 +35,7 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
-      <VBox layoutX="28.0" layoutY="100.0" prefHeight="101.0" prefWidth="100.0" AnchorPane.topAnchor="175.0">
+      <VBox layoutX="28.0" layoutY="294.0" prefHeight="31.0" prefWidth="137.0" AnchorPane.topAnchor="294.0">
          <children>
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Attendance List">
                <font>
@@ -42,7 +45,22 @@
          </children>
       </VBox>
       <PieChart fx:id="attendancePieChart" layoutX="316.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="215.0" title="Overall Attendance:" />
-      <AnchorPane fx:id="attendanceList" layoutX="28.0" layoutY="144.0" prefHeight="402.0" prefWidth="184.0" />
-      <Line endX="23.0" endY="47.0" layoutX="220.0" layoutY="167.0" startX="23.0" startY="379.0" />
+      <ScrollPane layoutX="28.0" layoutY="328.0" prefHeight="250.0" prefWidth="250.0" style="-fx-background: transparent; -fx-background-color: transparent;">
+        <content>
+          <AnchorPane fx:id="attendanceList" minHeight="0.0" minWidth="0.0" prefHeight="248.0" prefWidth="248.0" />
+        </content>
+      </ScrollPane>
+      <Line endX="23.0" endY="-19.0" layoutX="268.0" layoutY="167.0" startX="23.0" startY="411.0" />
+      <Group layoutX="42.0" layoutY="112.0">
+         <children>
+            <DatePicker fx:id="datePicker" layoutX="17.0" layoutY="-2.0" prefHeight="6.0" prefWidth="174.0" />
+            <Label layoutX="-18.0" layoutY="2.0" prefHeight="17.0" prefWidth="35.0" text="Date:" />
+            <ScrollPane fx:id="scrollPane" layoutX="-14.0" layoutY="35.0" prefHeight="150.0" prefWidth="250.0" style="-fx-background: transparent; -fx-background-color: transparent;">
+               <content>
+                  <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="148.0" prefWidth="248.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </Group>
    </children>
 </AnchorPane>

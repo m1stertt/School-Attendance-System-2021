@@ -227,6 +227,32 @@ public class StudRegDAO {
         return courses;
     }
 
+    public List<String> getCoursesStringForDay(Student student,Integer day) {
+        List<String> courses = new ArrayList<String>();
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT c.Name, CDOW.Weekday, CDOW.StartTime, CDOW.EndTime " +
+                    "FROM Courses AS C " +
+                    "INNER JOIN CoursesDayOfWeek AS CDOW ON c.Id = CDOW.CourseId " +
+                    "INNER JOIN StudentCourses as SC ON SC.StudentId = ? AND SC.CourseID = C.Id WHERE CDOW.Weekday = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(2, day);
+            pstmt.setInt(1,student.getId());
+            ResultSet rs = pstmt.executeQuery();
+            DateFormat df = new SimpleDateFormat("H:mm");
+
+            while (rs.next()) {
+                Date from = new Date(rs.getTime("StartTime").getTime());
+                Date to = new Date(rs.getTime("EndTime").getTime());
+                String course = rs.getString("Name") + ": " + df.format(from) + " - " + df.format(to);
+                courses.add(course);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return courses;
+    }
+
     /**
      * This method is used to check if
      * student register in the correct timeframe of the lesson.
