@@ -4,11 +4,8 @@ import be.Attendance;
 import be.Course;
 import be.Student;
 import dal.StudRegDAO;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 
-import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,16 +13,12 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 
 public class StudRegManager {
 
     private StudRegDAO studRegDAO = new StudRegDAO();
 
-    public List<Student> getAllStudents(int id) {
-        return studRegDAO.getAllStudents(id);
-    }
 
     public List<Student> getAllStudentsCalculatedAbsence(int id) {
         int courseDaysInSemester = studRegDAO.getCourseDaysInSemesterCourseUntilNow(id);
@@ -37,17 +30,10 @@ public class StudRegManager {
     public List<Course> getAllCourses() {
         return studRegDAO.getAllCourses();
     }
-    public List<Course> getAllCoursesForStudent(Student student) {
-        return studRegDAO.getAllStudentCourses(student.getId());
-    }
 
     public List<String> getCoursesStringForDay(LocalDate localDate) {
         Integer day = localDate.getDayOfWeek().getValue();
         return studRegDAO.getCoursesStringForDay(day);
-    }
-
-    public XYChart.Series getSummarizedStudentWeekDayData() {
-        return studRegDAO.getSummarizedStudentWeekDayData();
     }
 
     public HashMap<String, ArrayList<LocalTime>> getCourseTime(LocalDate localDate) {

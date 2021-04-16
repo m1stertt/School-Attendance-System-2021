@@ -6,14 +6,15 @@ import be.Student;
 import bll.LoginSession;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.chart.XYChart;
 
-import java.sql.Date;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 public class StudRegDAO {
 
@@ -115,6 +116,24 @@ public class StudRegDAO {
         }
     }
 
+    public String getCourseName(int courseID) {
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT C.Name " +
+                    "FROM Courses AS C " +
+                    "WHERE C.Id = ?;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, courseID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("Name");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Timestamp> getALlStudentAttendanceDates(int studentId) {
         dataSource = new DBConnector();
         List<Timestamp> allAttendanceDays = new ArrayList();
@@ -154,6 +173,27 @@ public class StudRegDAO {
             throwables.printStackTrace();
         }
         return null;
+    }
+
+    public List<Attendance> getStudentAttendanceDays(int studentId) {
+        ObservableList<Attendance> attendance = FXCollections.observableArrayList();
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT * FROM StudentLessonAttendance AS SLA WHERE SLA.StudentId = ? ORDER BY SLA.RegisterTime DESC;";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1,studentId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Integer studentID = rs.getInt("StudentID");
+                Integer courseID = rs.getInt("CourseID");
+                Date registerTime = rs.getDate("RegisterTime");
+                Integer status = rs.getInt("Status");
+                attendance.add(new Attendance(studentID,courseID,registerTime,status));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return attendance;
     }
 
     /**
@@ -219,20 +259,6 @@ public class StudRegDAO {
             throwables.printStackTrace();
         }
         return courseTimes;
-    }
-
-
-    public XYChart.Series getSummarizedStudentWeekDayData() {
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Student Attendance");
-        Random r = new Random();
-        double totalCourses = 100;
-        series.getData().add(new XYChart.Data<>("Monday", (r.nextInt(10) / totalCourses) * 100));
-        series.getData().add(new XYChart.Data<>("Tuesday", (r.nextInt(10) / totalCourses) * 100));
-        series.getData().add(new XYChart.Data<>("Wednesday", (r.nextInt(10) / totalCourses) * 100));
-        series.getData().add(new XYChart.Data<>("Thursday", (r.nextInt(10) / totalCourses) * 100));
-        series.getData().add(new XYChart.Data<>("Friday", (r.nextInt(10) / totalCourses) * 100));
-        return series;
     }
 
     /**

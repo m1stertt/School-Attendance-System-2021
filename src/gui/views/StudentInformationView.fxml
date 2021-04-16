@@ -27,7 +27,7 @@
             <Font size="15.0" />
          </font>
       </JFXButton>
-      <LineChart fx:id="absenceDisplay" layoutX="189.0" layoutY="69.0" prefHeight="482.0" prefWidth="506.0" title="Weekly Attendance Absence" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="44.0">
+      <LineChart fx:id="absenceDisplay" layoutX="267.0" layoutY="199.0" prefHeight="365.0" prefWidth="519.0" title="Weekly Attendance Absence" AnchorPane.bottomAnchor="36.0" AnchorPane.rightAnchor="14.0">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -76,7 +76,7 @@
             </Text>
          </children>
       </VBox>
-      <PieChart fx:id="attendancePieChart" layoutX="28.0" layoutY="397.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="215.0" title="Overall Attendance:" />
+      <PieChart fx:id="attendancePieChart" layoutX="316.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="215.0" title="Overall Attendance:" />
       <AnchorPane fx:id="attendanceList" layoutX="28.0" layoutY="216.0" prefHeight="330.0" prefWidth="184.0" />
       <Line endX="23.0" endY="47.0" layoutX="220.0" layoutY="167.0" startX="23.0" startY="379.0" />
    </children>

@@ -32,7 +32,4 @@ public class User {
         this.lastName.set(lastName);
     }
 
-    public int getId() {
-        return id;
-    }
 }
