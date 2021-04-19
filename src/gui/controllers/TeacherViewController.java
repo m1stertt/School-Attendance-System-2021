@@ -63,6 +63,7 @@ public class TeacherViewController implements Initializable {
         initializeStudents();
         displayClock();
         runGetStudentsThread();
+        runDrawPieChartDataThread();
     }
 
 

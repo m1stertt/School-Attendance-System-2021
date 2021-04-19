@@ -2,6 +2,7 @@ package bll;
 
 import be.Attendance;
 import be.Course;
+import be.CourseDay;
 import be.Student;
 import dal.StudRegDAO;
 import javafx.scene.chart.XYChart;
@@ -13,7 +14,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 
 public class StudRegManager {
 
@@ -39,6 +39,11 @@ public class StudRegManager {
         return studRegDAO.getCoursesStringForDay(student,day);
     }
 
+    public List<CourseDay> getCourseDays(Student student, LocalDate localDate){
+        Integer day = localDate.getDayOfWeek().getValue();
+        return studRegDAO.getCourseDays(student,day);
+    }
+
     public HashMap<String, ArrayList<LocalTime>> getCourseTime(LocalDate localDate) {
         Integer day = localDate.getDayOfWeek().getValue();
         return studRegDAO.getCourseTime(day);
@@ -58,6 +63,14 @@ public class StudRegManager {
         courseAbsenceData.put("classAverageStudentAttendance", classAverageStudentAttendance);
         courseAbsenceData.put("allLessonsInCourse", allLessonsInCourse);
         return courseAbsenceData;
+    }
+
+    public void registerAttendance(Student student,int courseID){
+        studRegDAO.registerAttendance(student,courseID);
+    }
+
+    public void removeAttendance(Attendance attendance){
+        studRegDAO.removeAttendance(attendance);
     }
 
     public HashMap<String, Integer> getWeekdayAttendanceData(int studentId) {
@@ -111,9 +124,7 @@ public class StudRegManager {
         return series;
     }
 
-    //Returns a double representing the percentage of how present the student is. 0.24=24% attendance etc.
-
-    public double getAbsenceData(int studentID) {
+    public double getAbsenceData(int studentID) { //Returns a double representing the percentage of how present the student is. 0.24=24% attendance etc.
         List<Course> courses = studRegDAO.getAllStudentCourses(studentID);
         double sum = 0;
         for (Course course : courses) {

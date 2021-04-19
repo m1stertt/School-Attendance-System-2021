@@ -2,6 +2,7 @@ package dal;
 
 import be.Attendance;
 import be.Course;
+import be.CourseDay;
 import be.Student;
 import bll.LoginSession;
 import javafx.collections.FXCollections;
@@ -116,6 +117,42 @@ public class StudRegDAO {
         }
     }
 
+    public void registerAttendance(Student student,int courseId) {
+        Calendar cal = Calendar.getInstance();
+        java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+
+            String sql = "INSERT INTO StudentLessonAttendance (StudentId, CourseId, RegisterTime, [Status]) " +
+                    "VALUES (?, ?, ?, ?);";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, student.getId());
+            pstmt.setInt(2, courseId);
+            pstmt.setTimestamp(3, timestamp);
+            pstmt.setBoolean(4, true);
+            pstmt.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void removeAttendance(Attendance attendance){
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            System.out.println(new java.sql.Timestamp(attendance.getRegisterTime().getTime()));
+            String sql = "DELETE FROM StudentLessonAttendance WHERE StudentId=? AND CourseId=? AND RegisterTime=?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, attendance.getStudentID());
+            pstmt.setInt(2, attendance.getCourseID());
+            pstmt.setTimestamp(3, new java.sql.Timestamp(attendance.getRegisterTime().getTime()));
+            pstmt.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     public String getCourseName(int courseID) {
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
@@ -186,7 +223,7 @@ public class StudRegDAO {
             while (rs.next()) {
                 Integer studentID = rs.getInt("StudentID");
                 Integer courseID = rs.getInt("CourseID");
-                Date registerTime = rs.getDate("RegisterTime");
+                Timestamp registerTime = rs.getTimestamp("RegisterTime");
                 Integer status = rs.getInt("Status");
                 attendance.add(new Attendance(studentID,courseID,registerTime,status));
             }
@@ -246,6 +283,28 @@ public class StudRegDAO {
                 Date to = new Date(rs.getTime("EndTime").getTime());
                 String course = rs.getString("Name") + ": " + df.format(from) + " - " + df.format(to);
                 courses.add(course);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return courses;
+    }
+
+    public List<CourseDay> getCourseDays(Student student, Integer day){
+        List<CourseDay> courses = new ArrayList<>();
+        dataSource = new DBConnector();
+        try (Connection con = dataSource.getConnection()) {
+            String sql = "SELECT c.Id,c.Name, CDOW.Weekday, CDOW.StartTime, CDOW.EndTime " +
+                    "FROM Courses AS C " +
+                    "INNER JOIN CoursesDayOfWeek AS CDOW ON c.Id = CDOW.CourseId " +
+                    "INNER JOIN StudentCourses as SC ON SC.StudentId = ? AND SC.CourseID = C.Id WHERE CDOW.Weekday = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(2, day);
+            pstmt.setInt(1,student.getId());
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                courses.add(new CourseDay(rs.getInt(1),rs.getString(2),day,new Date(rs.getTime("StartTime").getTime()),new Date(rs.getTime("EndTime").getTime())));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

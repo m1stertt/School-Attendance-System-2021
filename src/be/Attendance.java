@@ -2,6 +2,8 @@ package be;
 
 import bll.StudRegManager;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class Attendance {
@@ -25,5 +27,22 @@ public class Attendance {
 
     public Date getTime(){
         return registerTime;
+    }
+
+    public int getStudentID() {
+        return studentID;
+    }
+
+    public Date getRegisterTime() {
+        return registerTime;
+    }
+
+    public int getCourseID() {
+        return courseID;
+    }
+
+    @Override
+    public String toString() {
+        return getName()+"\nDate & Time:\n"+getTime().toString();
     }
 }
