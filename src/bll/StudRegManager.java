@@ -49,6 +49,30 @@ public class StudRegManager {
         return studRegDAO.getCourseTime(day);
     }
 
+    public void registerAttendance(Student student,int courseID){
+        studRegDAO.registerAttendance(student,courseID);
+    }
+
+    public void removeAttendance(Attendance attendance){
+        studRegDAO.removeAttendance(attendance);
+    }
+
+    public List<Attendance> getAttendanceList(int studentID) {
+        return studRegDAO.getStudentAttendanceDays(studentID);
+    }
+
+    public boolean checkLogin(String userName, String password, String role) {
+        return studRegDAO.checkLogin(userName, password, role);
+    }
+
+    public void attendanceRegister(Course course) {
+        studRegDAO.registerAttendance(course.getId());
+    }
+
+    public String getCourseName(int courseID) {
+        return studRegDAO.getCourseName(courseID);
+    }
+
     public HashMap<String, Double> getCourseAbsenceDate(int courseId) {
         HashMap<String, Double> courseAbsenceData = new HashMap<>();
         List<Student> allStudents = studRegDAO.getAllStudents(courseId);
@@ -63,14 +87,6 @@ public class StudRegManager {
         courseAbsenceData.put("classAverageStudentAttendance", classAverageStudentAttendance);
         courseAbsenceData.put("allLessonsInCourse", allLessonsInCourse);
         return courseAbsenceData;
-    }
-
-    public void registerAttendance(Student student,int courseID){
-        studRegDAO.registerAttendance(student,courseID);
-    }
-
-    public void removeAttendance(Attendance attendance){
-        studRegDAO.removeAttendance(attendance);
     }
 
     public HashMap<String, Integer> getWeekdayAttendanceData(int studentId) {
@@ -134,19 +150,4 @@ public class StudRegManager {
         return d;
     }
 
-    public List<Attendance> getAttendanceList(int studentID) {
-        return studRegDAO.getStudentAttendanceDays(studentID);
-    }
-
-    public boolean checkLogin(String userName, String password, String role) {
-        return studRegDAO.checkLogin(userName, password, role);
-    }
-
-    public void attendanceRegister(Course course) {
-        studRegDAO.registerAttendance(course.getId());
-    }
-
-    public String getCourseName(int courseID) {
-        return studRegDAO.getCourseName(courseID);
-    }
 }
