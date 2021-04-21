@@ -17,12 +17,12 @@ class LoginViewControllerTest {
     void attendanceLogin() {
 
         User testUser = new User(1, "Test", "User");
-        String login = testUser.getFirstName();
+        String login = testUser.getId()+testUser.getFirstName()+testUser.getLastName();
 
         Exception error = Assertions.assertThrows(IllegalArgumentException.class, ()->{
             testUser.equals(login);
         });
-        
+
         Assertions.assertEquals(login,testUser.getFirstName());
 
         String expectedMessage = "Username is invalid";
