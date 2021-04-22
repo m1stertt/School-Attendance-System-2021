@@ -12,6 +12,5 @@
     <orderEntry type="library" name="com.jfoenix:jfoenix:9.0.10" level="project" />
     <orderEntry type="library" name="com.microsoft.sqlserver:mssql-jdbc:9.1.1.jre15-preview" level="project" />
     <orderEntry type="library" name="org.junit.jupiter:junit-jupiter:5.5.2" level="project" />
-    <orderEntry type="library" name="com.microsoft.sqlserver:mssql-jdbc:9.2.1.jre15" level="project" />
   </component>
 </module>

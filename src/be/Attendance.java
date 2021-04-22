@@ -1,9 +1,6 @@
 package be;
 
 import bll.StudRegManager;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 public class Attendance {
