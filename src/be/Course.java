@@ -20,24 +20,6 @@ public class Course {
     public Date getEndDate() {
         return endDate;
     }
-//    private double presence;
-//    private double absence;
-//
-//    public double getPresence() {
-//        return presence;
-//    }
-//
-//    public void setPresence(double presence) {
-//        this.presence = presence;
-//    }
-//
-//    public double getAbsence() {
-//        return absence;
-//    }
-//
-//    public void setAbsence(double absence) {
-//        this.absence = absence;
-//    }
 
 
     public String getCourseName() {
