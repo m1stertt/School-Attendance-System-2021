@@ -9,7 +9,7 @@ import java.util.List;
 
 public class StudRegTestDAO {
 
-    public List<Course> getAllStudentCourses() {
+    public List<Course> getAllStudentCourses(int studentID) {
         List<Course> allCourses = new ArrayList<>();
         Date time = Calendar.getInstance().getTime();
         allCourses.add(new Course(1, "DBOS2.AB.21", time, time));
