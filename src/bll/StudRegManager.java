@@ -40,14 +40,15 @@ public class StudRegManager {
         Integer day = localDate.getDayOfWeek().getValue();
         return studRegDAO.getCoursesStringForDay(day);
     }
-    public List<String> getCoursesStringForDay(Student student,LocalDate localDate) {
+
+    public List<String> getCoursesStringForDay(Student student, LocalDate localDate) {
         Integer day = localDate.getDayOfWeek().getValue();
-        return studRegDAO.getCoursesStringForDay(student,day);
+        return studRegDAO.getCoursesStringForDay(student, day);
     }
 
-    public List<CourseDay> getCourseDays(Student student, LocalDate localDate){
+    public List<CourseDay> getCourseDays(Student student, LocalDate localDate) {
         Integer day = localDate.getDayOfWeek().getValue();
-        return studRegDAO.getCourseDays(student,day);
+        return studRegDAO.getCourseDays(student, day);
     }
 
     public HashMap<String, ArrayList<LocalTime>> getCourseTime(LocalDate localDate) {
@@ -55,11 +56,11 @@ public class StudRegManager {
         return studRegDAO.getCourseTime(day);
     }
 
-    public void registerAttendance(Student student,int courseID){
-        studRegDAO.registerAttendance(student,courseID);
+    public void registerAttendance(Student student, int courseID) {
+        studRegDAO.registerAttendance(student, courseID);
     }
 
-    public void removeAttendance(Attendance attendance){
+    public void removeAttendance(Attendance attendance) {
         studRegDAO.removeAttendance(attendance);
     }
 
@@ -155,7 +156,7 @@ public class StudRegManager {
         return d;
     }
 
-    public static StudRegManager createStudRegManager(){
+    public static StudRegManager createStudRegManager() {
         return new StudRegManager(new StudRegDAO());
     }
 

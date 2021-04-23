@@ -15,14 +15,6 @@ public class StudentInformationModel {
     private StudRegManager studRegManager = StudRegManager.createStudRegManager();
 
     public XYChart.Series createWeekDaySeries(int studentId) {
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Student Attendance");
-        series.getData().add(new XYChart.Data<>("Monday", lessonDaysUntilNow - attendanceDays.get("MONDAY")));
-        series.getData().add(new XYChart.Data<>("Tuesday", lessonDaysUntilNow - attendanceDays.get("TUESDAY")));
-        series.getData().add(new XYChart.Data<>("Wednesday", lessonDaysUntilNow - attendanceDays.get("WEDNESDAY")));
-        series.getData().add(new XYChart.Data<>("Thursday", lessonDaysUntilNow - attendanceDays.get("THURSDAY")));
-        series.getData().add(new XYChart.Data<>("Friday", lessonDaysUntilNow - attendanceDays.get("FRIDAY")));
         return studRegManager.createWeekDaySeries(studentId);
     }
 

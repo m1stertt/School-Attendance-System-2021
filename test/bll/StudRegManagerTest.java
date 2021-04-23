@@ -92,21 +92,6 @@ class StudRegManagerTest {
 
     @Test
     void createWeekDaySeries() {
-        int expectedLessonDaysUntilNow = 16;
-
-
-        expectedLessonDaysUntilNow = expectedLessonDaysUntilNow / 5;
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Student Attendance");
-
-
-        XYChart.Series actualData = studentRegManager.createWeekDaySeries(1);
-        System.out.println(actualData.getData().get(0).getClass().get);
-
-
-
-
-
     }
 
     @Test
