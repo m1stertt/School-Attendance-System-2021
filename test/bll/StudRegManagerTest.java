@@ -3,70 +3,122 @@ package bll;
 import be.Attendance;
 import be.Course;
 import be.Student;
+import dal.StudRegDAO;
+import javafx.scene.chart.XYChart;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class StudRegManagerTest {
 
+    static StudRegManager studentRegManager;
+
+    @BeforeAll
+    static void init() {
+        studentRegManager = new StudRegManager(new StudRegTestDAO());
+    }
+
+    @Test
+    void getAllStudentsCalculatedAbsence() {
+        double expectedResult = 50;
+        List<Student> allStudents = studentRegManager.getAllStudentsCalculatedAbsence(1);
+        allStudents.forEach(student -> Assertions.assertEquals(expectedResult, student.getAbsence()));
+    }
+
+    @Test
+    void getAllCourses() {
+        List<Course> allCoursesActual = studentRegManager.getAllCourses();
+        List<Course> allCoursesExpected = new ArrayList<>();
+        Date time = Calendar.getInstance().getTime();
+        allCoursesExpected.add(new Course(1, "DBOS2.AB.21", time, time));
+        allCoursesExpected.add(new Course(2, "ITO2.AB.21", time, time));
+        allCoursesExpected.add(new Course(3, "SCO2.B.21", time, time));
+        allCoursesExpected.add(new Course(4, "SDE2.B.21", time, time));
+
+        for (int i = 0; i < allCoursesActual.size(); i++) {
+            Assertions.assertEquals(allCoursesExpected.get(i).getCourseName(), allCoursesActual.get(i).getCourseName());
+        }
+    }
+
+    @Test
+    void getCoursesStringForDay() {
+        List<String> allCoursesForTest = new ArrayList<>();
+        allCoursesForTest.add("DBOS2.AB.21");
+        allCoursesForTest.add("ITO2.AB.21");
+        allCoursesForTest.add("SCO2.B.21");
+        allCoursesForTest.add("SDE2.B.21");
+
+        List<String> actualCoursesString = studentRegManager.getCoursesStringForDay(LocalDate.now());
+        for (int i = 0; i < allCoursesForTest.size(); i++) {
+            Assertions.assertEquals(allCoursesForTest.get(i), actualCoursesString.get(i));
+        }
+    }
+
+
     @Test
     void getCourseAbsenceDate() {
+        double expectedClassAverageStudentAttendance = 10;
+        double expectedAllLessonsInCourse = 20;
 
-            StudRegManager StudentRegManager = new StudRegManager();
+        HashMap<String, Double> actualAbsenceDate = studentRegManager.getCourseAbsenceDate(2);
+        Assertions.assertEquals(actualAbsenceDate.get("classAverageStudentAttendance"), expectedClassAverageStudentAttendance);
+        Assertions.assertEquals(actualAbsenceDate.get("allLessonsInCourse"), expectedAllLessonsInCourse);
 
-            //make sure student counter works
-            // the list has 5 students
-            // 1: 0   2: 1   3: 1  4: 0  5: 1
-            // totalStudentAttendanceDays = 2
-            // class average = 2 / 5 = 0.4 -> 40%
-            //expected result is a hasmap with value of "classAverageStudentAttendance", we should get 0.4
-
-            List<String> students = new List<String>;
-              students.add("1");
-              students.add("0");
-              students.add("0");
-              students.add("0");
-              students.add("1");
-              //some mock data?
-
-
-            double expectedOutput = 0.4;  //
-            String resultTAG = "classAverageStudentAttendance";
-
-            HashMap<String, Double> theResult = new HashMap<String, Double>;
-
-            theResult = getCourseAbsenceDate(); //calling the method with a course id with students we just made
-
-            double actualNumber = theResult.get(resultTAG);
-
-            assertEquals(expectedOutput, actualNumber);
 
     }
 
     @Test
+    void getCourseName() {
+        String actualCourseName = studentRegManager.getCourseName(1);
+        Assertions.assertEquals("DBOS2.AB.21", actualCourseName);
+    }
+
+    @Test
     void getWeekdayAttendanceData() {
+        HashMap<String, Integer> actualData = studentRegManager.getWeekdayAttendanceData(2);
+
+        Assertions.assertEquals(actualData.get("MONDAY"), 0);
+        Assertions.assertEquals(actualData.get("TUESDAY"), 0);
+        Assertions.assertEquals(actualData.get("WEDNESDAY"), 0);
+        Assertions.assertEquals(actualData.get("THURSDAY"), 0);
+        Assertions.assertEquals(actualData.get("FRIDAY"), 4);
 
     }
 
     @Test
     void createWeekDaySeries() {
+        int expectedLessonDaysUntilNow = 16;
+
+
+        expectedLessonDaysUntilNow = expectedLessonDaysUntilNow / 5;
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Student Attendance");
+
+
+        XYChart.Series actualData = studentRegManager.createWeekDaySeries(1);
+        System.out.println(actualData.getData().get(0).getClass().get);
+
+
+
+
+
     }
 
     @Test
     void getAbsenceData() {
-        double expectedSum = 0.5;
-        double sum = 0;
-        StudRegTestDAO studRegTestDAO = new StudRegTestDAO();
-        List<Course> courses = studRegTestDAO.getAllStudentCourses();
-
-        for (Course ignored : courses) {
-            sum += (double) studRegTestDAO.getStudentAttendanceDaysInSemesterCourse() / studRegTestDAO.getCourseDaysInSemesterCourseUntilNow();
-        }
-        double d = sum / courses.size();
-        assertEquals(expectedSum, d);
+        double absenceData = studentRegManager.getAbsenceData(2);
+        Assertions.assertEquals(0.5, absenceData);
     }
+
+//    @Test
+//    void getAbsenceDataNoCourses() {
+//        StudRegManager studentRegManager = new StudRegManager(new StudRegTestDAO());
+//        double absenceData = studentRegManager.getAbsenceData(3);
+//        Assertions.assertEquals(0, absenceData);
+//    }
 }

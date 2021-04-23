@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class StudRegDAO {
+public class StudRegDAO implements IStudRegDAO {
 
     private DBConnector dataSource;
 
@@ -26,6 +26,7 @@ public class StudRegDAO {
      * @param courseId id of the course.
      * @return a list of all students
      */
+    @Override
     public List<Student> getAllStudents(int courseId) {
         List<Student> students = new ArrayList<>();
         dataSource = new DBConnector();
@@ -49,6 +50,7 @@ public class StudRegDAO {
      * Method to get all courses.
      * @return a list of all courses registered in database.
      */
+    @Override
     public List<Course> getAllCourses() {
         ObservableList<Course> courses = FXCollections.observableArrayList();
         dataSource = new DBConnector();
@@ -74,6 +76,7 @@ public class StudRegDAO {
      * Method to get all courses related to a student.
      * @return a list of all courses related to a student in the database.
      */
+    @Override
     public List<Course> getAllStudentCourses(int studentID) {
         ObservableList<Course> courses = FXCollections.observableArrayList();
         dataSource = new DBConnector();
@@ -97,6 +100,7 @@ public class StudRegDAO {
         return courses;
     }
 
+    @Override
     public void registerAttendance(int courseId) {
         Calendar cal = Calendar.getInstance();
         java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
@@ -117,7 +121,8 @@ public class StudRegDAO {
         }
     }
 
-    public void registerAttendance(Student student,int courseId) {
+    @Override
+    public void registerAttendance(Student student, int courseId) {
         Calendar cal = Calendar.getInstance();
         java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
         dataSource = new DBConnector();
@@ -137,6 +142,7 @@ public class StudRegDAO {
         }
     }
 
+    @Override
     public void removeAttendance(Attendance attendance){
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
@@ -153,6 +159,7 @@ public class StudRegDAO {
         }
     }
 
+    @Override
     public String getCourseName(int courseID) {
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
@@ -171,6 +178,7 @@ public class StudRegDAO {
         return null;
     }
 
+    @Override
     public List<Timestamp> getALlStudentAttendanceDates(int studentId) {
         dataSource = new DBConnector();
         List<Timestamp> allAttendanceDays = new ArrayList();
@@ -192,6 +200,7 @@ public class StudRegDAO {
     }
 
 
+    @Override
     public Integer getStudentAttendanceDaysInSemesterCourse(int courseId, int studentId) {
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
@@ -212,6 +221,7 @@ public class StudRegDAO {
         return null;
     }
 
+    @Override
     public List<Attendance> getStudentAttendanceDays(int studentId) {
         ObservableList<Attendance> attendance = FXCollections.observableArrayList();
         dataSource = new DBConnector();
@@ -239,6 +249,7 @@ public class StudRegDAO {
      * @param day a day in the format 1-7.
      * @return a list of all course names on a day.
      */
+    @Override
     public List<String> getCoursesStringForDay(Integer day) {
         List<String> courses = new ArrayList<String>();
         dataSource = new DBConnector();
@@ -264,7 +275,8 @@ public class StudRegDAO {
         return courses;
     }
 
-    public List<String> getCoursesStringForDay(Student student,Integer day) {
+    @Override
+    public List<String> getCoursesStringForDay(Student student, Integer day) {
         List<String> courses = new ArrayList<String>();
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {
@@ -290,6 +302,7 @@ public class StudRegDAO {
         return courses;
     }
 
+    @Override
     public List<CourseDay> getCourseDays(Student student, Integer day){
         List<CourseDay> courses = new ArrayList<>();
         dataSource = new DBConnector();
@@ -320,6 +333,7 @@ public class StudRegDAO {
      * @return a HashMap containing a String key with the name of the lesson
      * each key is related to a list containing the start and end time of the lesson.
      */
+    @Override
     public HashMap<String, ArrayList<LocalTime>> getCourseTime(Integer day) {
         HashMap<String, ArrayList<LocalTime>> courseTimes = new HashMap<>();
         try (Connection con = dataSource.getConnection()) {
@@ -353,6 +367,7 @@ public class StudRegDAO {
      * @param courseId courseId of the course to calculate the days from.
      * @return An integer with the total course days for a semester.
      */
+    @Override
     public Integer getCourseDaysInSemesterCourseUntilNow(int courseId) {
         HashMap<String, Date> startAndEndDate = getCourseStartAndEndDate(courseId);
         ArrayList<Integer> courseWeekDays = getCourseLessonDays(courseId);
@@ -456,6 +471,7 @@ public class StudRegDAO {
         return courseWeekDays;
     }
 
+    @Override
     public boolean checkLogin(String username, String password, String Role) {
         dataSource = new DBConnector();
         try (Connection con = dataSource.getConnection()) {

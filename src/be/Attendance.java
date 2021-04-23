@@ -1,6 +1,8 @@
 package be;
 
 import bll.StudRegManager;
+import dal.StudRegDAO;
+
 import java.util.Date;
 
 public class Attendance {
@@ -9,7 +11,7 @@ public class Attendance {
     private Date registerTime;
     private int status;
     private String name;
-    private StudRegManager studRegManager = new StudRegManager();
+    private StudRegManager studRegManager = new StudRegManager(new StudRegDAO());
     public Attendance(int studentID,int courseID, Date registerTime,int status){
         this.studentID=studentID;
         this.courseID=courseID;

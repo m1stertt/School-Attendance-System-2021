@@ -2,6 +2,7 @@ package gui.models;
 
 import be.Course;
 import bll.StudRegManager;
+import dal.StudRegDAO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class StudentViewModel {
 
-    private StudRegManager studRegManager = new StudRegManager();
+    private StudRegManager studRegManager = StudRegManager.createStudRegManager();
 
 
     public List<String> getCoursesStringForDay(LocalDate localDate) {

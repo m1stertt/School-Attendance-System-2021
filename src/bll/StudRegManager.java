@@ -4,6 +4,7 @@ import be.Attendance;
 import be.Course;
 import be.CourseDay;
 import be.Student;
+import dal.IStudRegDAO;
 import dal.StudRegDAO;
 import javafx.scene.chart.XYChart;
 
@@ -17,7 +18,12 @@ import java.util.List;
 
 public class StudRegManager {
 
-    private StudRegDAO studRegDAO = new StudRegDAO();
+    private IStudRegDAO studRegDAO;
+
+
+    public StudRegManager(IStudRegDAO studRegDAO) {
+        this.studRegDAO = studRegDAO;
+    }
 
     public List<Student> getAllStudentsCalculatedAbsence(int id) {
         int courseDaysInSemester = studRegDAO.getCourseDaysInSemesterCourseUntilNow(id);
@@ -127,6 +133,7 @@ public class StudRegManager {
         for (Course c : allCourses) {
             lessonDaysUntilNow += studRegDAO.getCourseDaysInSemesterCourseUntilNow(c.getId());
         }
+        // Calculations can be improved.
         lessonDaysUntilNow = lessonDaysUntilNow / 5;
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Student Attendance");
@@ -146,6 +153,10 @@ public class StudRegManager {
         }
         double d = sum / courses.size();
         return d;
+    }
+
+    public static StudRegManager createStudRegManager(){
+        return new StudRegManager(new StudRegDAO());
     }
 
 }
