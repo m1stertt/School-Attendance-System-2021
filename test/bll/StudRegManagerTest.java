@@ -1,18 +1,13 @@
 package bll;
 
-import be.Attendance;
 import be.Course;
 import be.Student;
-import dal.StudRegDAO;
-import javafx.scene.chart.XYChart;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class StudRegManagerTest {
 
@@ -82,11 +77,11 @@ class StudRegManagerTest {
     void getWeekdayAttendanceData() {
         HashMap<String, Integer> actualData = studentRegManager.getWeekdayAttendanceData(2);
 
-        Assertions.assertEquals(actualData.get("MONDAY"), 0);
-        Assertions.assertEquals(actualData.get("TUESDAY"), 0);
-        Assertions.assertEquals(actualData.get("WEDNESDAY"), 0);
-        Assertions.assertEquals(actualData.get("THURSDAY"), 0);
-        Assertions.assertEquals(actualData.get("FRIDAY"), 4);
+        Assertions.assertEquals(0, actualData.get("MONDAY"));
+        Assertions.assertEquals(0, actualData.get("TUESDAY"));
+        Assertions.assertEquals(0, actualData.get("WEDNESDAY"));
+        Assertions.assertEquals(0, actualData.get("THURSDAY"));
+        Assertions.assertEquals(4, actualData.get("FRIDAY"));
 
     }
 
