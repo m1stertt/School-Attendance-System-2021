@@ -85,6 +85,8 @@ class StudRegManagerTest {
 
     }
 
+
+    // Hard to test.. Creating the series should probably have been moved to models instead of being in the bll.
     @Test
     void createWeekDaySeries() {
     }
